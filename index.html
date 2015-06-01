@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Socket.io plugin for Chrome</title>
+  <link href="vendor/bootstrap/bootstrap-3.3.4.min.css" rel="stylesheet">
+</head>
+
+<body>
+  <nav class="navbar navbar-default">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">Socket.io</a>
+      </div>
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <form class="navbar-form navbar-right" role="search">
+          <div class="form-group">
+            <input type="text" class="form-control" placeholder="Socket.io server URL">
+          </div>
+          <button type="submit" class="btn btn-default">Connect</button>
+        </form>
+      </div>
+    </div>
+  </nav>
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+            <button type="button" class="btn btn-warning btn-xs pull-right" data-toggle="collapse" data-target="#connectionPanel">
+              Toggle display</button>
+            <h3 class="panel-title">Connect / Disconnect Events</h3>
+          </div>
+          <div id="connectionPanel" class="panel-body">
+            Panel content
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="vendor/jquery-1.11.2.min.js"></script>
+  <script src="vendor/bootstrap/bootstrap-3.3.4.min.js"></script>
+  <script src="vendor/socket.io-1.3.5.min.js"></script>
+  <script src="app.js"></script>
+</body>
+
+</html>
