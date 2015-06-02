@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Socket.io client tool</title>
-  <link href="vendor/bootstrap/bootstrap-3.3.4.min.css" rel="stylesheet">
+  <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.4/sandstone/bootstrap.min.css" rel="stylesheet">
   <style type="text/css">
   .inline-right-margin {
     margin-right: 10px;
@@ -18,11 +18,11 @@
   }
   
   .long-input input {
-    width: 95% !important;
+    width: 98% !important;
   }
   
   #eventPanels .panel-body {
-    max-height: 300px;
+    max-height: 318px;
     overflow: scroll;
     overflow-y: scroll;
     overflow-x: hidden;
@@ -34,6 +34,13 @@
     bottom: 10px;
     right: 30px;
   }
+  .panel-title {
+    text-transform: initial !important;
+  }
+
+  #emitDataMenuButton {
+    margin-right: 0;
+  }
   </style>
   <meta property="og:image" content="http://amritb.github.io/socketio-client-tool/screenshot.png" />
   <meta property="og:title" content="Socket.io Client Tool" />
@@ -41,7 +48,7 @@
 </head>
 
 <body>
-  <nav class="navbar navbar-default">
+  <nav class="navbar navbar-default navbar-static-top">
     <div class="container">
       <div class="navbar-header">
         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
@@ -54,7 +61,7 @@
       </div>
       <p class="navbar-text">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<iframe src="https://ghbtns.com/github-btn.html?user=amritb&repo=socketio-client-tool&type=star&count=true&size=small" frameborder="0" scrolling="0" width="170px" height="20px"></iframe></p>
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-        <button id="emitDataMenuButton" type="button" class="btn btn-default navbar-btn navbar-right disabled" data-toggle="modal" data-target="#emitDataModal">Emit data</button>
+        <button id="emitDataMenuButton" type="button" class="btn btn-warning navbar-btn navbar-right disabled" data-toggle="modal" data-target="#emitDataModal">Emit data</button>
         <p class="navbar-text navbar-right">&nbsp; &nbsp;</p>
         <form id="connect" class="navbar-form navbar-right" role="search" style="margin-right: -30px;">
           <div class="form-group long-input">
@@ -87,7 +94,7 @@
             <div class="panel-heading">
               <button type="button" class="btn btn-warning btn-xs pull-right" data-toggle="collapse" data-target="#connectionPanel" aria-expanded="false" aria-controls="connectionPanel">
                 Toggle panel</button>
-              <h3 class="panel-title">"connect / disconnect" Events</h3>
+              <h3 class="panel-title">On "connect / disconnect" Events</h3>
             </div>
             <div id="connectionPanel" class="panel-body">
             </div>
@@ -129,9 +136,9 @@
       </div>
     </div>
   </div>
-  <script src="vendor/jquery-1.11.2.min.js"></script>
-  <script src="vendor/bootstrap/bootstrap-3.3.4.min.js"></script>
-  <script src="vendor/socket.io-1.3.5.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.5/socket.io.min.js"></script>
   <script src="app.js"></script>
 </body>
 
