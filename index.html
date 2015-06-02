@@ -5,16 +5,29 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Socket.io plugin for Chrome</title>
+  <title>Socket.io client tool</title>
   <link href="vendor/bootstrap/bootstrap-3.3.4.min.css" rel="stylesheet">
   <style type="text/css">
   .inline-right-margin {
     margin-right: 10px;
+    width: 95%;
   }
+  
+  .long-input {
+    width: 300px;
+  }
+  
+  .long-input input {
+    width: 95% !important;
+  }
+  
   #eventPanels .panel-body {
     max-height: 300px;
     overflow: scroll;
+    overflow-y: scroll;
+    overflow-x: hidden;
   }
+  
   .connection-alert {
     width: 300px;
     position: fixed;
@@ -34,11 +47,13 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="#">Socket.io Extension</a>
+        <a class="navbar-brand" href="#">Socket.io Client Tool</a>
       </div>
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <button type="button" class="btn btn-default navbar-btn navbar-right" data-toggle="modal" data-target="#emitData">Emit data</button>
+        <p class="navbar-text navbar-right">&nbsp; OR &nbsp;</p>
         <form id="connect" class="navbar-form navbar-right" role="search" style="margin-right: -30px;">
-          <div class="form-group">
+          <div class="form-group long-input">
             <input type="text" class="form-control inline-right-margin" placeholder="Socket.io server URL">
           </div>
           <button type="submit" class="btn btn-success">Connect</button>
@@ -48,11 +63,12 @@
   </nav>
   <div class="container">
     <div class="row">
-      <div class="col-sm-12"><!--  col-sm-offset-3 -->
+      <div class="col-sm-12">
+        <!--  col-sm-offset-3 -->
         <div id="addNewPanel">
           <div class="well">
             <form class="form-inline text-center" id="addListener">
-              <div class="form-group has-success">
+              <div class="form-group has-success long-input">
                 <label class="sr-only" for="exampleInputEmail3">Event</label>
                 <input type="text" class="eventName form-control inline-right-margin" id="exampleInputEmail3" placeholder="Event name">
               </div>
@@ -80,11 +96,26 @@
   <div class="alert alert-danger connection-alert disconnected-alert text-center">
     <strong>Disconnected</strong>
   </div>
-
   <div class="alert alert-success connection-alert connected-alert text-center">
     <strong>Connected!</strong>
   </div>
 
+  <div class="modal fade" id="emitData" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel">Emit data</h4>
+        </div>
+        <div class="modal-body">
+          Still working on this part
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Emit</button>
+        </div>
+      </div>
+    </div>
+  </div>
   <script src="vendor/jquery-1.11.2.min.js"></script>
   <script src="vendor/bootstrap/bootstrap-3.3.4.min.js"></script>
   <script src="vendor/socket.io-1.3.5.min.js"></script>

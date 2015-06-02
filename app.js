@@ -1,5 +1,7 @@
 var eventsToListen = ['message'];
 var socket = {};
+var disconnectedInerval;
+var title = document.title;
 
 $(function () {
   $('.disconnected-alert, .connected-alert').hide();
@@ -13,11 +15,20 @@ $(function () {
     } else {
       socket = io(url);
       socket.on('connect', function () {
+        clearInterval(disconnectedInerval);
+        document.title = title;
         $('.disconnected-alert').hide();
         $('.connected-alert').show().delay(5000).fadeOut(1000);
         $("#connectionPanel").prepend('<p><span class="text-muted">'+Date.now()+'</span> Connected</p>');
       });
       socket.on('disconnect', function (sock) {
+        disconnectedInerval = setInterval(function(){
+          if(document.title === "Disconnected") {
+            document.title = title;
+          } else {
+            document.title = "Disconnected";
+          }
+        }, 800);
         $('.disconnected-alert').hide();
         $('.disconnected-alert').show();
         $("#connectionPanel").prepend('<p><span class="text-muted">'+Date.now()+'</span> Disconnected --> '+sock+'</p>');
