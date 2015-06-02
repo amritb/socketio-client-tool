@@ -1,3 +1,5 @@
+'use strict'
+
 var eventsToListen = ['message'];
 var socket = {};
 var disconnectedInerval;
@@ -49,6 +51,26 @@ $(function () {
       console.error('Invalid event name');
     }
   });
+
+  $("#emitData").submit(function (e) {
+    console.log(socket);
+    if(socket.io) {
+      var event = $("#emitData #event-name").val().trim();
+      var data = $("#emitData #data-text").val().trim();
+      if(event !== '' && data !== '') {
+        $('#emitData #event-name').val('');
+        $("#emitData #data-text").val('');
+        socket.emit(event, data);
+        $('#emitDataModal').modal('toggle');
+      } else {
+        console.error('Emitter - Invalid event name or data');
+      }
+    } else {
+      console.error('Emitter - not connected');
+    }
+    e.preventDefault();
+  });
+
 });
 
 function registerEvents() {

@@ -52,9 +52,9 @@
         </button>
         <a class="navbar-brand" href="#">Socket.io Client Tool</a>
       </div>
-      <p class="navbar-text">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<iframe src="https://ghbtns.com/github-btn.html?user=amritb&repo=socketio-client-tool&type=star&count=false&size=small" frameborder="0" scrolling="0" width="170px" height="20px"></iframe></p>
+      <p class="navbar-text">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<iframe src="https://ghbtns.com/github-btn.html?user=amritb&repo=socketio-client-tool&type=star&count=true&size=small" frameborder="0" scrolling="0" width="170px" height="20px"></iframe></p>
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-        <button type="button" class="btn btn-default navbar-btn navbar-right" data-toggle="modal" data-target="#emitData">Emit data</button>
+        <button type="button" class="btn btn-default navbar-btn navbar-right" data-toggle="modal" data-target="#emitDataModal">Emit data</button>
         <p class="navbar-text navbar-right">&nbsp; &nbsp;</p>
         <form id="connect" class="navbar-form navbar-right" role="search" style="margin-right: -30px;">
           <div class="form-group long-input">
@@ -104,19 +104,28 @@
     <strong>Connected!</strong>
   </div>
 
-  <div class="modal fade" id="emitData" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal fade" id="emitDataModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
           <h4 class="modal-title" id="myModalLabel">Emit data</h4>
         </div>
-        <div class="modal-body">
-          Still working on this part
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-primary" data-dismiss="modal">Emit</button>
-        </div>
+        <form id="emitData">
+          <div class="modal-body">
+            <div class="form-group">
+              <label for="event-name" class="control-label">Event:</label>
+              <input type="text" class="form-control" id="event-name">
+            </div>
+            <div class="form-group">
+              <label for="data-text" class="control-label">Data:</label>
+              <textarea class="form-control" id="data-text"></textarea>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Emit</button>
+          </div>
+        </form>
       </div>
     </div>
   </div>
