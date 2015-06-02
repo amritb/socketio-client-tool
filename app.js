@@ -17,6 +17,7 @@ $(function () {
     } else {
       socket = io(url);
       socket.on('connect', function () {
+        $('#emitDataMenuButton').removeClass('disabled');
         clearInterval(disconnectedInerval);
         document.title = title;
         $('.disconnected-alert').hide();
@@ -24,6 +25,7 @@ $(function () {
         $("#connectionPanel").prepend('<p><span class="text-muted">'+Date.now()+'</span> Connected</p>');
       });
       socket.on('disconnect', function (sock) {
+        $('#emitDataMenuButton').addClass('disabled');
         disconnectedInerval = setInterval(function(){
           if(document.title === "Disconnected") {
             document.title = title;
