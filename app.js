@@ -1,6 +1,6 @@
 'use strict'
 
-var eventsToListen = ['message', 'connect_error'];
+var eventsToListen = ['message'];
 var socket = {};
 var disconnectedInerval;
 var url = '';
