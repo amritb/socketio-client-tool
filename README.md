@@ -5,6 +5,6 @@ This tools helps you to test socket.io servers.
 
 ### TODOs
 1. ~~Functional event emit modal~~
-2. Add events and socket.io URL to page URL so that it can be shared with set inputs
+2. ~~Add events and socket.io URL to page URL so that it can be shared with set inputs~~
 3. Clear button on panels
 4. Emit buttons on panel headers - which will prefill the emit form's message input field
