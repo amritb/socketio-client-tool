@@ -7,6 +7,7 @@ This tools helps you to test socket.io servers.
 1. ~~Functional event emit modal~~
 2. ~~Add events and socket.io URL to page URL so that it can be shared with set inputs~~
 3. Change timestamps to better formatted time
+4. Fix URL hashes - if the has only has url value, initiate the app with the connected URL, and no extra event should be added
 4. Show socket.id somewhere in the UI (easy to copy)
 3. Helper links/buttons to add basic socketio evnets like reconnect, etc.
 4. Page titles should show the socket.io connection urls
