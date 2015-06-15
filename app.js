@@ -16,6 +16,7 @@ $(function () {
     if(url === '') {
       console.error('Invalid URL given');
     } else {
+      io.connect({transports: ['websocket']});
       socket = io(url);
       setHash();
       socket.on('connect', function () {
