@@ -6,8 +6,6 @@ var disconnectedInerval;
 var url = '';
 var title = document.title;
 
-io.connect({transports: ['websocket']});
-
 $(function () {
   $('.disconnected-alert, .connected-alert').hide();
   $('#eventPanels').prepend(makePanel('message'));
@@ -18,7 +16,7 @@ $(function () {
     if(url === '') {
       console.error('Invalid URL given');
     } else {
-      socket = io(url);
+      socket = io(url, {transports: ['websocket']});
       setHash();
       socket.on('connect', function () {
         $('#emitDataMenuButton').removeClass('disabled');
