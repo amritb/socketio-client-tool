@@ -7,8 +7,19 @@ var url = '';
 var title = document.title;
 
 $(function () {
+  $('#jsonData').hide();
   $('.disconnected-alert, .connected-alert').hide();
   $('#eventPanels').prepend(makePanel('message'));
+  $('input[type=radio][name=emitAs]').change(function () {
+    if (this.value === 'JSON') {
+      $('#plainTextData').hide();
+      $('#jsonData').show();
+    }
+    if (this.value === 'plaintext') {
+      $('#plainTextData').show();
+      $('#jsonData').hide();
+    }
+  });
 
   $("#connect").submit(function (e) {
     e.preventDefault();
@@ -19,7 +30,7 @@ $(function () {
       socket = io(url, {transports: ['websocket']});
       setHash();
       socket.on('connect', function () {
-        $('#emitDataMenuButton').removeClass('disabled');
+        $("#emitData input, textarea, button").prop('disabled', false);
         clearInterval(disconnectedInerval);
         document.title = title;
         $('.disconnected-alert').hide();
@@ -27,7 +38,6 @@ $(function () {
         $("#connectionPanel").prepend('<p><span class="text-muted">'+Date.now()+'</span> Connected</p>');
       });
       socket.on('disconnect', function (sock) {
-        $('#emitDataMenuButton').addClass('disabled');
         disconnectedInerval = setInterval(function(){
           if(document.title === "Disconnected") {
             document.title = title;
@@ -77,6 +87,19 @@ $(function () {
     }
     e.preventDefault();
   });
+
+  $("#addNewJsonField").click(function (e) {
+    e.preventDefault();
+    var template = "<div class=\"form-inline\"><div class=\"form-group\"><input type=\"text\" class=\"form-control\"></div> <div class=\"form-group\"><input type=\"text\" class=\"form-control\"></div> <div class=\"form-group\"><button class=\"btn btn-xs remove\" type=\"button\" class=\"btn\">remove</button></div></div>";
+    $("#jsonData").append(template);
+  });
+
+  $("#jsonData").on('click', '.remove', function (e) {
+    e.preventDefault();
+    $(this).closest(".form-inline").remove();
+  });
+
+
   processHash();
 });
 
