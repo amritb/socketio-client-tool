@@ -61,6 +61,9 @@ $(function () {
     if(socket.io) {
       var event = $("#emitData #event-name").val().trim();
       var data = $("#emitData #data-text").val().trim();
+      if($('#emitAsJSON').is(":checked")){
+        data = JSON.parse(data);
+      }
       if(event !== '' && data !== '') {
         $('#emitData #event-name').val('');
         $("#emitData #data-text").val('');
