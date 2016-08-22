@@ -72,31 +72,41 @@
     </div>
   </nav>
   <div class="container">
-      <div class="row well">
+      <ul class="nav nav-tabs" role="tablist">
+          <li role="presentation" class="active">
+              <a href="#listening" aria-controls="profile" role="tab" data-toggle="tab">Listening</a>
+          </li>
+          <li role="presentation">
+              <a href="#emiting" aria-controls="home" role="tab" data-toggle="tab">Emiting</a>
+          </li>
+      </ul>
+      <div class="tab-content">
+      <div class="row tab-pane" role="tabpanel" id="emiting">
           <div class="col-sm-12">
               <div id="emitPanel">
-                  <h1>Emiting</h1>
                   <form id="emitData">
-                      <div class="form-group">
-                          <label for="event-name" class="control-label">Event:</label>
-                          <input type="text" class="form-control" id="event-name" disabled>
+                      <div class="form-group well">
+                          <div class="col-sm-5">
+                              <input type="text" class="form-control" id="event-name" placeholder="Event name">
+                          </div>
+                          <button id="submitEmit" type="submit" class="btn btn-success" disabled>Emit</button>
                       </div>
                       <div class="form-group">
                           <label class="radio-inline">
                               <input id="emitAsPlaintext" type="radio" name="emitAs"
-                                     value="plaintext" checked="checked" disabled/>
+                                     value="plaintext" checked="checked" />
                               Send data as plaintext
                           </label>
                           <label class="radio-inline">
                               <input id="emitAsJSON" type="radio" name="emitAs"
-                                     value="JSON" disabled/>
+                                     value="JSON" />
                               Send data as JSON object
                           </label>
                       </div>
                       <div class="form-group">
                           <div id="plainTextData">
                               <label for="data-text" class="control-label">Data:</label>
-                              <textarea class="form-control" id="data-text" disabled></textarea>
+                              <textarea class="form-control" id="data-text" ></textarea>
                           </div>
                       </div>
                       <div class="form-group">
@@ -107,37 +117,28 @@
                               <button id="addNewJsonField" type="button" class="btn btn-xs btn-warning">add new</button>
                               <div class="form-inline">
                                   <div class="form-group">
-                                      <input type="text" class="form-control">
+                                      <input type="text" class="form-control key">
                                   </div>
                                   <div class="form-group">
-                                      <input type="text" class="form-control">
+                                      <input type="text" class="form-control value">
                                   </div>
                               </div>
                           </div>
-                      </div>
-
-                      <div class="form-group ">
-                          <button type="submit" class="btn btn-primary" disabled>Emit</button>
                       </div>
                   </form>
               </div>
           </div>
       </div>
-
-    <div class="row">
+    <div class="row tab-pane active" role="tabpanel" id="listening">
       <div class="col-sm-12">
-        <h1>Listening</h1>
-          <!--  col-sm-offset-3 -->
-        <div id="addNewPanel">
           <div class="well">
-            <form class="form-inline text-center" id="addListener">
-              <div class="form-group has-success long-input">
-                <label class="sr-only" for="exampleInputEmail3">Event</label>
-                <input type="text" class="eventName form-control inline-right-margin" id="exampleInputEmail3" placeholder="Event name">
+            <form id="addListener">
+              <div class="col-sm-5">
+                <input type="text" class="eventName form-control" id="exampleInputEmail3" placeholder="Event name">
               </div>
-              <button type="submit" class="btn btn-success">Listen</button>
+                <button type="submit" class="btn btn-success">Listen</button>
+
             </form>
-          </div>
         </div>
       </div>
       <div class="col-sm-12">
@@ -154,6 +155,7 @@
         </div>
       </div>
     </div>
+  </div>
   </div>
 
   <div class="alert alert-danger connection-alert disconnected-alert text-center">

@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 var eventsToListen = ['message'];
 var socket = {};
@@ -30,7 +30,7 @@ $(function () {
       socket = io(url, {transports: ['websocket']});
       setHash();
       socket.on('connect', function () {
-        $("#emitData input, textarea, button").prop('disabled', false);
+        $("#submitEmit").prop('disabled', false);
         clearInterval(disconnectedInerval);
         document.title = title;
         $('.disconnected-alert').hide();
@@ -38,6 +38,7 @@ $(function () {
         $("#connectionPanel").prepend('<p><span class="text-muted">'+Date.now()+'</span> Connected</p>');
       });
       socket.on('disconnect', function (sock) {
+        $("#submitEmit").prop('disabled', true);
         disconnectedInerval = setInterval(function(){
           if(document.title === "Disconnected") {
             document.title = title;
@@ -70,9 +71,12 @@ $(function () {
   $("#emitData").submit(function (e) {
     if(socket.io) {
       var event = $("#emitData #event-name").val().trim();
-      var data = $("#emitData #data-text").val().trim();
+      var data;
       if($('#emitAsJSON').is(":checked")){
-        data = JSON.parse(data);
+          data = parseJSONForm();
+      }
+      if($('#emitAsPlaintext').is(":checked")){
+          data = $("#emitData #data-text").val().trim();
       }
       if(event !== '' && data !== '') {
         $('#emitData #event-name').val('');
@@ -90,7 +94,7 @@ $(function () {
 
   $("#addNewJsonField").click(function (e) {
     e.preventDefault();
-    var template = "<div class=\"form-inline\"><div class=\"form-group\"><input type=\"text\" class=\"form-control\"></div> <div class=\"form-group\"><input type=\"text\" class=\"form-control\"></div> <div class=\"form-group\"><button class=\"btn btn-xs remove\" type=\"button\" class=\"btn\">remove</button></div></div>";
+    var template = "<div class=\"form-inline\"><div class=\"form-group\"><input type=\"text\" class=\"form-control key\"></div> <div class=\"form-group\"><input type=\"text\" class=\"form-control value\"></div> <div class=\"form-group\"><button class=\"btn btn-xs remove\" type=\"button\" class=\"btn\">remove</button></div></div>";
     $("#jsonData").append(template);
   });
 
@@ -137,6 +141,15 @@ function registerEvents() {
       });
     });
   }
+}
+
+function parseJSONForm() {
+    var result = {};
+    $("#jsonData.form-inline").each(function (index, el) {
+        var k = $(el).find('input.key').val().trim();
+        result[k] = $(el).find('input.value').val().trim();
+    });
+    return result
 }
 
 function makePanel(event) {
