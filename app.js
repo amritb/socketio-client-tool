@@ -144,12 +144,22 @@ function registerEvents() {
 }
 
 function parseJSONForm() {
-    var result = {};
-    $("#jsonData.form-inline").each(function (index, el) {
-        var k = $(el).find('input.key').val().trim();
-        result[k] = $(el).find('input.value').val().trim();
+    var result = "{";
+    var formInputs = $('#jsonData').find('.form-inline');
+    formInputs.each(function (index, el) {
+        var key = $(el).find('.key').val().trim();
+        if(!key.length){
+         return true;
+        }
+        result += "\"" + key + "\"";
+        result += (" : ");
+        result += "\"" + ($(el).find('.value').val().trim()) + "\"";
+        result += ",";
     });
-    return result
+    result = result.slice(0, -1);
+    result += "}";
+    console.log("json to emit " + result);
+    return JSON.parse(result);
 }
 
 function makePanel(event) {
