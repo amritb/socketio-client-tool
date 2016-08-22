@@ -35,7 +35,7 @@ $(function () {
         document.title = title;
         $('.disconnected-alert').hide();
         $('.connected-alert').show().delay(5000).fadeOut(1000);
-        $("#connectionPanel").prepend('<p><span class="text-muted">'+Date.now()+'</span> Connected</p>');
+        $("#connectionPanel").prepend('<p><span class="text-muted">'+getFormattedNowTime()+'</span> Connected</p>');
       });
       socket.on('disconnect', function (sock) {
         $("#submitEmit").prop('disabled', true);
@@ -48,7 +48,7 @@ $(function () {
         }, 800);
         $('.disconnected-alert').hide();
         $('.disconnected-alert').show();
-        $("#connectionPanel").prepend('<p><span class="text-muted">'+Date.now()+'</span> Disconnected --> '+sock+'</p>');
+        $("#connectionPanel").prepend('<p><span class="text-muted">'+getFormattedNowTime()+'</span> Disconnected --> '+sock+'</p>');
       });
       registerEvents();
     }
@@ -137,7 +137,7 @@ function registerEvents() {
     $.each(eventsToListen, function (index, value) {
       socket.on(value, function (data) {
         data = data === undefined ? '-- NO DATA --' : data;
-        $("#panel-"+value+"-content").prepend('<p><span class="text-muted">'+Date.now()+'</span><strong> '+JSON.stringify(data)+'</strong></p>');
+        $("#panel-"+value+"-content").prepend('<p><span class="text-muted">'+getFormattedNowTime()+'</span><strong> '+JSON.stringify(data)+'</strong></p>');
       });
     });
   }
@@ -154,4 +154,12 @@ function parseJSONForm() {
 
 function makePanel(event) {
   return '<div class="panel panel-primary" id="panel-'+event+'"> <div class="panel-heading"> <button type="button" class="btn btn-warning btn-xs pull-right" data-toggle="collapse" data-target="#panel-'+event+'-content" aria-expanded="false" aria-controls="panel-'+event+'-content">Toggle panel</button> <h3 class="panel-title">On "'+event+'" Events</h3> </div> <div id="panel-'+event+'-content" class="panel-body"></div> </div>';
+}
+
+function getFormattedNowTime() {
+    var now = new Date();
+    return now.getHours() + ":" +
+        now.getMinutes() + ":" +
+        now.getSeconds() + ":" +
+        now.getMilliseconds();
 }
