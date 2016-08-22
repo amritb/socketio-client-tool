@@ -8,6 +8,8 @@ var title = document.title;
 
 $(function () {
   $('#jsonData').hide();
+  $('.emitted-msg').hide();
+  $('.emitted-failure-msg').hide();
   $('.disconnected-alert, .connected-alert').hide();
   $('#eventPanels').prepend(makePanel('message'));
   $('input[type=radio][name=emitAs]').change(function () {
@@ -79,11 +81,11 @@ $(function () {
           data = $("#emitData #data-text").val().trim();
       }
       if(event !== '' && data !== '') {
-        $('#emitData #event-name').val('');
-        $("#emitData #data-text").val('');
+        console.log('Emitter - emitted: '+data);
         socket.emit(event, data);
-        $('#emitDataModal').modal('toggle');
+        $('.emitted-msg').show().delay(700).fadeOut(1000)
       } else {
+        $('.emitted-failure-msg').show().delay(700).fadeOut(1000)
         console.error('Emitter - Invalid event name or data');
       }
     } else {
@@ -136,7 +138,9 @@ function registerEvents() {
   if(socket.io) {
     $.each(eventsToListen, function (index, value) {
       socket.on(value, function (data) {
-        data = data === undefined ? '-- NO DATA --' : data;
+        if(!data) {
+            data = '-- NO DATA --'
+        }
         $("#panel-"+value+"-content").prepend('<p><span class="text-muted">'+getFormattedNowTime()+'</span><strong> '+JSON.stringify(data)+'</strong></p>');
       });
     });
