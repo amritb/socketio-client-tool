@@ -10,6 +10,8 @@ $(function () {
   $('#jsonData').hide();
   $('.emitted-msg').hide();
   $('.emitted-failure-msg').hide();
+  $('.listen-failure-msg').hide();
+  $('.listen-added-msg').hide();
   $('.disconnected-alert, .connected-alert').hide();
   $('#eventPanels').prepend(makePanel('message'));
   $('input[type=radio][name=emitAs]').change(function () {
@@ -59,13 +61,15 @@ $(function () {
   $("#addListener").submit(function (e) {
     e.preventDefault();
     var event = $("#addListener input:first").val().trim();
-    if(event !== '') {
+    if(event.length!==0 && eventsToListen.indexOf(event) === -1) {
       eventsToListen.push(event);
       $('#eventPanels').prepend(makePanel(event));
       $("#addListener input:first").val('');
       setHash();
       registerEvents();
+      $('.listen-added-msg').show().delay(1000).fadeOut(1000);
     } else {
+      $('.listen-failure-msg').show().delay(1500).fadeOut(1000);
       console.error('Invalid event name');
     }
   });
@@ -85,7 +89,7 @@ $(function () {
         socket.emit(event, data);
         $('.emitted-msg').show().delay(700).fadeOut(1000)
       } else {
-        $('.emitted-failure-msg').show().delay(700).fadeOut(1000)
+        $('.emitted-failure-msg').show().delay(700).fadeOut(1000);
         console.error('Emitter - Invalid event name or data');
       }
     } else {
@@ -141,7 +145,8 @@ function registerEvents() {
         if(!data) {
             data = '-- NO DATA --'
         }
-        $("#panel-"+value+"-content").prepend('<p><span class="text-muted">'+getFormattedNowTime()+'</span><strong> '+JSON.stringify(data)+'</strong></p>');
+        var elementToExtend = $("#eventPanels").find("[data-windowId='" + value + "']");
+        elementToExtend.prepend('<p><span class="text-muted">' + getFormattedNowTime() + '</span><strong> ' + JSON.stringify(data) + '</strong></p>');
       });
     });
   }
@@ -167,7 +172,7 @@ function parseJSONForm() {
 }
 
 function makePanel(event) {
-  return '<div class="panel panel-primary" id="panel-'+event+'"> <div class="panel-heading"> <button type="button" class="btn btn-warning btn-xs pull-right" data-toggle="collapse" data-target="#panel-'+event+'-content" aria-expanded="false" aria-controls="panel-'+event+'-content">Toggle panel</button> <h3 class="panel-title">On "'+event+'" Events</h3> </div> <div id="panel-'+event+'-content" class="panel-body"></div> </div>';
+  return '<div class="panel panel-primary"> <div class="panel-heading"> <button type="button" class="btn btn-warning btn-xs pull-right" data-toggle="collapse" data-target="#panel-'+event+'-content" aria-expanded="false" aria-controls="panel-'+event+'-content">Toggle panel</button> <h3 class="panel-title">On "'+event+'" Events</h3> </div> <div data-windowId="'+event+'" class="panel-body"></div> </div>';
 }
 
 function getFormattedNowTime() {
