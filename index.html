@@ -12,22 +12,22 @@
     margin-right: 10px;
     width: 95%;
   }
-  
+
   .long-input {
     width: 300px;
   }
-  
+
   .long-input input {
     width: 98% !important;
   }
-  
+
   #eventPanels .panel-body {
     max-height: 318px;
     overflow: scroll;
     overflow-y: scroll;
     overflow-x: hidden;
   }
-  
+
   .connection-alert {
     width: 300px;
     position: fixed;
@@ -61,7 +61,6 @@
       </div>
       <p class="navbar-text">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<iframe src="https://ghbtns.com/github-btn.html?user=amritb&repo=socketio-client-tool&type=star&count=true&size=small" frameborder="0" scrolling="0" width="170px" height="20px"></iframe></p>
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-        <button id="emitDataMenuButton" type="button" class="btn btn-warning navbar-btn navbar-right disabled" data-toggle="modal" data-target="#emitDataModal">Emit data</button>
         <p class="navbar-text navbar-right">&nbsp; &nbsp;</p>
         <form id="connect" class="navbar-form navbar-right" role="search" style="margin-right: -30px;">
           <div class="form-group long-input">
@@ -73,19 +72,76 @@
     </div>
   </nav>
   <div class="container">
-    <div class="row">
-      <div class="col-sm-12">
-        <!--  col-sm-offset-3 -->
-        <div id="addNewPanel">
-          <div class="well">
-            <form class="form-inline text-center" id="addListener">
-              <div class="form-group has-success long-input">
-                <label class="sr-only" for="exampleInputEmail3">Event</label>
-                <input type="text" class="eventName form-control inline-right-margin" id="exampleInputEmail3" placeholder="Event name">
+      <ul class="nav nav-tabs" role="tablist">
+          <li role="presentation" class="active">
+              <a href="#listening" aria-controls="profile" role="tab" data-toggle="tab">Listening</a>
+          </li>
+          <li role="presentation">
+              <a href="#emiting" aria-controls="home" role="tab" data-toggle="tab">Emiting</a>
+          </li>
+      </ul>
+      <div class="tab-content">
+      <div class="row tab-pane" role="tabpanel" id="emiting">
+          <div class="col-sm-12">
+              <div id="emitPanel">
+                  <form id="emitData">
+                      <div class="form-group well">
+                          <div class="col-sm-5">
+                              <input type="text" class="form-control" id="event-name" placeholder="Event name">
+                          </div>
+                          <button id="submitEmit" type="submit" class="btn btn-success" disabled>Emit</button>
+                          <span class="label label-primary emitted-msg">Event emitted!</span>
+                          <span class="label label-danger emitted-failure-msg">Event failure</span>
+                      </div>
+                      <div class="form-group">
+                          <label class="radio-inline">
+                              <input id="emitAsPlaintext" type="radio" name="emitAs"
+                                     value="plaintext" checked="checked" />
+                              Send data as plaintext
+                          </label>
+                          <label class="radio-inline">
+                              <input id="emitAsJSON" type="radio" name="emitAs"
+                                     value="JSON" />
+                              Send data as JSON object
+                          </label>
+                      </div>
+                      <div class="form-group">
+                          <div id="plainTextData">
+                              <label for="data-text" class="control-label">Data: plaintext</label>
+                              <textarea class="form-control" id="data-text" ></textarea>
+                          </div>
+                      </div>
+                      <div class="form-group">
+                          <div id="jsonData">
+                              <div>
+                                  <label for="data-text" class="control-label">Data: JSON (key, value)</label>
+                              </div>
+                              <button id="addNewJsonField" type="button" class="btn btn-xs btn-warning">add new</button>
+                              <div class="form-inline">
+                                  <div class="form-group">
+                                      <input type="text" class="form-control key">
+                                  </div>
+                                  <div class="form-group">
+                                      <input type="text" class="form-control value">
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </form>
               </div>
-              <button type="submit" class="btn btn-success">Listen</button>
-            </form>
           </div>
+      </div>
+    <div class="row tab-pane active" role="tabpanel" id="listening">
+      <div class="col-sm-12">
+          <div class="well">
+            <form id="addListener">
+              <div class="col-sm-5">
+                <input type="text" class="eventName form-control" id="exampleInputEmail3" placeholder="Event name">
+              </div>
+                <button type="submit" class="btn btn-success">Listen</button>
+                <span class="label label-danger listen-failure-msg">Can't add duplicated or empty listener</span>
+                <span class="label label-primary listen-added-msg">Listener added</span>
+            </form>
         </div>
       </div>
       <div class="col-sm-12">
@@ -103,6 +159,7 @@
       </div>
     </div>
   </div>
+  </div>
 
   <div class="alert alert-danger connection-alert disconnected-alert text-center">
     <strong>Disconnected</strong>
@@ -111,40 +168,9 @@
     <strong>Connected!</strong>
   </div>
 
-  <div class="modal fade" id="emitDataModal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title" id="myModalLabel">Emit data</h4>
-        </div>
-        <form id="emitData">
-          <div class="modal-body">
-            <div class="form-group">
-              <label for="event-name" class="control-label">Event:</label>
-              <input type="text" class="form-control" id="event-name">
-            </div>
-            <div class="form-group">
-              <label for="data-text" class="control-label">Data:</label>
-              <textarea class="form-control" id="data-text"></textarea>
-            </div>
-            <div class="form-group">
-              <label>
-                <input id="emitAsJSON" type="checkbox" name="emitAsJSON" value="emitAsJSON"/>
-                Send data as JSON object
-              </label>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="submit" class="btn btn-primary">Emit</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/js/bootstrap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.5/socket.io.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.5/socket.io.min.js"></script>
   <script src="app.js"></script>
 </body>
 
