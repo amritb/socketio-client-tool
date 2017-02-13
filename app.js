@@ -86,7 +86,16 @@ $(function () {
       }
       if(event !== '' && data !== '') {
         console.log('Emitter - emitted: '+data);
-        socket.emit(event, data);
+        var emitResPanelId = 'emitAck-'+event;
+        var panel = $("#emitAckResPanels").find("[data-windowId='" + emitResPanelId + "']");
+        if(panel.length == 0){
+          $('#emitAckResPanels').prepend(makePanel(emitResPanelId));
+        }
+        socket.emit(event, data, function (data) {
+          console.log(data); 
+          var elementToExtend = $("#emitAckResPanels").find("[data-windowId='" + emitResPanelId + "']");
+          elementToExtend.prepend('<p><span class="text-muted">' + getFormattedNowTime() + '</span><strong> ' + JSON.stringify(data) + '</strong></p>');
+        });
         $('.emitted-msg').show().delay(700).fadeOut(1000)
       } else {
         $('.emitted-failure-msg').show().delay(700).fadeOut(1000);
