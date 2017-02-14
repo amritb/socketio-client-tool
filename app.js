@@ -5,6 +5,7 @@ var socket = {};
 var disconnectedInerval;
 var url = '';
 var title = document.title;
+var localdb = null;
 
 $(function () {
   $('#jsonData').hide();
@@ -85,17 +86,10 @@ $(function () {
           data = $("#emitData #data-text").val().trim();
       }
       if(event !== '' && data !== '') {
-        console.log('Emitter - emitted: '+data);
-        var emitResPanelId = 'emitAck-'+event;
-        var panel = $("#emitAckResPanels").find("[data-windowId='" + emitResPanelId + "']");
-        if(panel.length == 0){
-          $('#emitAckResPanels').prepend(makePanel(emitResPanelId));
-        }
-        socket.emit(event, data, function (data) {
-          console.log(data); 
-          var elementToExtend = $("#emitAckResPanels").find("[data-windowId='" + emitResPanelId + "']");
-          elementToExtend.prepend('<p><span class="text-muted">' + getFormattedNowTime() + '</span><strong> ' + JSON.stringify(data) + '</strong></p>');
-        });
+        var emitData = {event:event,request:data,time:getFormattedNowTime()};
+        postDataIntoDB(emitData);
+        addHistoryPanel(emitData);
+        emit(event,data,'emitAck-'+event);
         $('.emitted-msg').show().delay(700).fadeOut(1000)
       } else {
         $('.emitted-failure-msg').show().delay(700).fadeOut(1000);
@@ -119,7 +113,15 @@ $(function () {
   });
 
 
+  $("#clearHistory").submit(function (e) {
+    e.preventDefault();
+    initDB(true);
+    $('#emitHistoryPanels').empty();
+  });
+
+
   processHash();
+  initHistory();
 });
 
 function setHash() {
@@ -181,7 +183,7 @@ function parseJSONForm() {
 }
 
 function makePanel(event) {
-  return '<div class="panel panel-primary"> <div class="panel-heading"> <button type="button" class="btn btn-warning btn-xs pull-right" data-toggle="collapse" data-target="#panel-'+event+'-content" aria-expanded="false" aria-controls="panel-'+event+'-content">Toggle panel</button> <h3 class="panel-title">On "'+event+'" Events</h3> </div> <div data-windowId="'+event+'" class="panel-body"></div> </div>';
+  return '<div class="panel panel-primary"> <div class="panel-heading"> <button type="button" class="btn btn-warning btn-xs pull-right" data-toggle="collapse" data-target="#panel-'+event+'-content" aria-expanded="false" aria-controls="panel-'+event+'-content">Toggle panel</button> <h3 class="panel-title">On "'+event+'" Events</h3> </div> <div data-windowId="'+event+'" class="panel-body collapse in" id="panel-'+event+'-content"></div> </div>';
 }
 
 function getFormattedNowTime() {
@@ -190,4 +192,98 @@ function getFormattedNowTime() {
         now.getMinutes() + ":" +
         now.getSeconds() + ":" +
         now.getMilliseconds();
+}
+
+function initDB(clear){
+    var dbName = 'socketioClientDB';
+    if(clear){
+      localdb.destroy().then(function(){
+        localdb = new PouchDB(dbName);
+      });
+    }else{
+      localdb = new PouchDB(dbName);
+    }
+}
+
+function initHistory(){
+    initDB(false);
+    var ddoc = {
+      _id: '_design/index',
+      views: {
+        index: {
+          map: function mapFun(doc) {
+            emit(doc._id,doc);
+          }.toString()
+        }
+      }
+    };
+    localdb.put(ddoc).catch(function (err) {
+      if (err.name !== 'conflict') {
+        throw err;
+      }
+    }).then(function () {
+      return localdb.query('index',{ descending:true, limit:20 });
+    }).then(function (result) {
+        var rows = result.rows;
+        for(var i in rows){
+          var history = rows[i].value;
+          addHistoryPanel(history);
+        }
+    }).catch(function (err) {
+      console.log(err);
+    });
+}
+
+function postDataIntoDB(data,callback){
+    if(localdb == null){
+      localdb = new PouchDB("socketioClientDB");
+    }
+    localdb.post(data).then(callback);
+}
+
+function emit(event,data,panelId){
+    console.log('Emitter - emitted: '+data);
+    var panel = $("#emitAckResPanels").find("[data-windowId='" + panelId + "']");
+    if(panel.length == 0){
+      $('#emitAckResPanels').prepend(makePanel(panelId));
+    }
+    var emitData = {event:event,request:data,time:getFormattedNowTime()};
+    socket.emit(event, data, function (res) {
+      var elementToExtend = $("#emitAckResPanels").find("[data-windowId='" + panelId + "']");
+      elementToExtend.prepend('<p><span class="text-muted">' + getFormattedNowTime() + '</span><strong> ' + JSON.stringify(res) + '</strong></p>');
+    });
+}
+
+function addHistoryPanel(history){
+    var histPanelId = history.event+'_history';
+    var panel = $("#emitHistoryPanels").find("[data-windowId='" + histPanelId + "']");
+    if(panel.length == 0){
+      $('#emitHistoryPanels').prepend(makePanel(histPanelId));
+    }
+    var elementToExtend = $("#emitHistoryPanels").find("[data-windowId='" + histPanelId + "']");
+    var historyContent = $('#historyContent').text();
+    var id = 'hist-'+new Date().getTime();
+    historyContent = historyContent.split('[[id]]').join(id);
+    historyContent = historyContent.split('[[time]]').join(history.time);
+    historyContent = historyContent.split('[[reqData]]').join(JSON.stringify(history.request));
+    historyContent = historyContent.split('[[event]]').join(history.event);
+    elementToExtend.prepend(historyContent);
+    $("#form"+id).submit(function (e) {
+      e.preventDefault();
+      var id = $(this).find('[name="historyId"]').val();
+      var data = JSON.parse($(this).find('[name="reqData"]').val());
+      var event = $(this).find('[name="event"]').val();
+      if(socket.io) {
+        if(event !== '' && data !== '') {
+          emit(event,data,'emitAck-'+event);
+          $('.emitted-msg-'+id).show().delay(700).fadeOut(1000)
+        } else {
+          $('.emitted-failure-msg-'+id).show().delay(700).fadeOut(1000);
+          console.error('Emitter - Invalid event name or data');
+        }
+      } else {
+        $('.emitted-failure-msg-'+id).show().delay(700).fadeOut(1000);
+        console.error('Emitter - not connected');
+      }
+    });
 }

@@ -73,102 +73,119 @@
   </nav>
   <div class="container">
       <ul class="nav nav-tabs" role="tablist">
-          <li role="presentation" class="active">
+          <li role="presentation">
               <a href="#listening" aria-controls="profile" role="tab" data-toggle="tab">Listening</a>
           </li>
-          <li role="presentation">
+          <li role="presentation" class="active">
               <a href="#emiting" aria-controls="home" role="tab" data-toggle="tab">Emiting</a>
+          </li>
+          <li role="presentation">
+              <a href="#emitHistory" aria-controls="history" role="tab" data-toggle="tab">Emit History</a>
           </li>
           <li role="presentation">
               <a href="#emitAckRes" aria-controls="ackRes" role="tab" data-toggle="tab">Emiting AckRes</a>
           </li>
       </ul>
       <div class="tab-content">
-      <div class="row tab-pane" role="tabpanel" id="emiting">
+        <div class="row tab-pane active" role="tabpanel" id="emiting">
+            <div class="col-sm-12">
+                <div id="emitPanel">
+                    <form id="emitData">
+                        <div class="form-group well">
+                            <div class="col-sm-5">
+                                <input type="text" class="form-control" id="event-name" placeholder="Event name">
+                            </div>
+                            <button id="submitEmit" type="submit" class="btn btn-success" disabled>Emit</button>
+                            <span class="label label-primary emitted-msg">Event emitted!</span>
+                            <span class="label label-danger emitted-failure-msg">Event failure</span>
+                        </div>
+                        <div class="form-group">
+                            <label class="radio-inline">
+                                <input id="emitAsPlaintext" type="radio" name="emitAs"
+                                      value="plaintext" checked="checked" />
+                                Send data as plaintext
+                            </label>
+                            <label class="radio-inline">
+                                <input id="emitAsJSON" type="radio" name="emitAs"
+                                      value="JSON" />
+                                Send data as JSON object
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <div id="plainTextData">
+                                <label for="data-text" class="control-label">Data: plaintext</label>
+                                <textarea class="form-control" id="data-text" ></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div id="jsonData">
+                                <div>
+                                    <label for="data-text" class="control-label">Data: JSON (key, value)</label>
+                                </div>
+                                <button id="addNewJsonField" type="button" class="btn btn-xs btn-warning">add new</button>
+                                <div class="form-inline">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control key">
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" class="form-control value">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="row tab-pane" role="tabpanel" id="listening">
           <div class="col-sm-12">
-              <div id="emitPanel">
-                  <form id="emitData">
-                      <div class="form-group well">
-                          <div class="col-sm-5">
-                              <input type="text" class="form-control" id="event-name" placeholder="Event name">
-                          </div>
-                          <button id="submitEmit" type="submit" class="btn btn-success" disabled>Emit</button>
-                          <span class="label label-primary emitted-msg">Event emitted!</span>
-                          <span class="label label-danger emitted-failure-msg">Event failure</span>
-                      </div>
-                      <div class="form-group">
-                          <label class="radio-inline">
-                              <input id="emitAsPlaintext" type="radio" name="emitAs"
-                                     value="plaintext" checked="checked" />
-                              Send data as plaintext
-                          </label>
-                          <label class="radio-inline">
-                              <input id="emitAsJSON" type="radio" name="emitAs"
-                                     value="JSON" />
-                              Send data as JSON object
-                          </label>
-                      </div>
-                      <div class="form-group">
-                          <div id="plainTextData">
-                              <label for="data-text" class="control-label">Data: plaintext</label>
-                              <textarea class="form-control" id="data-text" ></textarea>
-                          </div>
-                      </div>
-                      <div class="form-group">
-                          <div id="jsonData">
-                              <div>
-                                  <label for="data-text" class="control-label">Data: JSON (key, value)</label>
-                              </div>
-                              <button id="addNewJsonField" type="button" class="btn btn-xs btn-warning">add new</button>
-                              <div class="form-inline">
-                                  <div class="form-group">
-                                      <input type="text" class="form-control key">
-                                  </div>
-                                  <div class="form-group">
-                                      <input type="text" class="form-control value">
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
+              <div class="well">
+                <form id="addListener">
+                  <div class="col-sm-5">
+                    <input type="text" class="eventName form-control" id="exampleInputEmail3" placeholder="Event name">
+                  </div>
+                    <button type="submit" class="btn btn-success">Listen</button>
+                    <span class="label label-danger listen-failure-msg">Can't add duplicated or empty listener</span>
+                    <span class="label label-primary listen-added-msg">Listener added</span>
+                </form>
+            </div>
+          </div>
+          <div class="col-sm-12">
+            <div id="eventPanels">
+              <div class="panel panel-primary" id="panel-connected">
+                <div class="panel-heading">
+                  <button type="button" class="btn btn-warning btn-xs pull-right" data-toggle="collapse" data-target="#connectionPanel" aria-expanded="false" aria-controls="connectionPanel">
+                    Toggle panel</button>
+                  <h3 class="panel-title">On "connect / disconnect" Events</h3>
+                </div>
+                <div id="connectionPanel" class="panel-body">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row tab-pane" role="tabpanel" id="emitAckRes">
+          <div class="col-sm-12">
+            <div id="emitAckResPanels">
+              <!--wait emiting-->
+            </div>
+          </div>
+        </div>
+        <div class="row tab-pane" role="tabpanel" id="emitHistory">
+            <div class="col-sm-12">
+              <div id="emitHistoryPanels">
+                <!--wait emiting-->
+              </div>
+            </div>
+            <div class="col-sm-12">
+                <div class="well">
+                  <form id="clearHistory">
+                      <button type="submit" class="btn btn-success">Clear ALL History</button>
                   </form>
               </div>
-          </div>
-      </div>
-    <div class="row tab-pane active" role="tabpanel" id="listening">
-      <div class="col-sm-12">
-          <div class="well">
-            <form id="addListener">
-              <div class="col-sm-5">
-                <input type="text" class="eventName form-control" id="exampleInputEmail3" placeholder="Event name">
-              </div>
-                <button type="submit" class="btn btn-success">Listen</button>
-                <span class="label label-danger listen-failure-msg">Can't add duplicated or empty listener</span>
-                <span class="label label-primary listen-added-msg">Listener added</span>
-            </form>
-        </div>
-      </div>
-      <div class="col-sm-12">
-        <div id="eventPanels">
-          <div class="panel panel-primary" id="panel-connected">
-            <div class="panel-heading">
-              <button type="button" class="btn btn-warning btn-xs pull-right" data-toggle="collapse" data-target="#connectionPanel" aria-expanded="false" aria-controls="connectionPanel">
-                Toggle panel</button>
-              <h3 class="panel-title">On "connect / disconnect" Events</h3>
             </div>
-            <div id="connectionPanel" class="panel-body">
-            </div>
-          </div>
         </div>
-      </div>
     </div>
-    <div class="row tab-pane active" role="tabpanel" id="emitAckRes">
-      <div class="col-sm-12">
-        <div id="emitAckResPanels">
-          <!--wait emiting-->
-        </div>
-      </div>
-    </div>
-  </div>
   </div>
 
   <div class="alert alert-danger connection-alert disconnected-alert text-center">
@@ -178,9 +195,30 @@
     <strong>Connected!</strong>
   </div>
 
+  <script type="text/html" id="historyContent">
+      <div class="row">
+        <form id="form[[id]]">
+          <div class="col-sm-2">
+            <span class="text-muted">[[time]]</span>
+          </div>
+          <div class="col-sm-6">
+            <input type="text" class="form-control" name="reqData" value='[[reqData]]'/>
+          </div>
+          <div class="col-sm-4">
+            <button type="submit" class="btn btn-success">Emit</button>
+            <span class="label label-primary emitted-msg-[[id]]" style="display:none">Event emitted!</span>
+            <span class="label label-danger emitted-failure-msg-[[id]]" style="display:none">Event failure</span>
+            <input type="hidden" name="historyId" value="[[id]]">
+            <input type="hidden" name="event" value="[[event]]">
+          </div>
+        </form>
+      </div>
+  </script>
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/js/bootstrap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.5/socket.io.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pouchdb/6.1.2/pouchdb.min.js"></script>
   <script src="app.js"></script>
 </body>
 
