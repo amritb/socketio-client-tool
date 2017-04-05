@@ -32,7 +32,7 @@ $(function () {
     if(url === '') {
       console.error('Invalid URL given');
     } else {
-      socket = io(url, {transports: ['websocket']});
+      socket = io(url);
       setHash();
       socket.on('connect', function () {
         $("#submitEmit").prop('disabled', false);
