@@ -4,6 +4,7 @@ var eventsToListen = ['message'];
 var socket = {};
 var disconnectedInerval;
 var url = '';
+var options = '';
 var title = document.title;
 var localdb = null;
 
@@ -29,10 +30,12 @@ $(function () {
   $("#connect").submit(function (e) {
     e.preventDefault();
     url = $("#connect input:first").val().trim();
+    options = $("#connect_options").val().trim();
+    var opt = options ? JSON.parse(options) : null;
     if(url === '') {
       console.error('Invalid URL given');
     } else {
-      socket = io(url, {transports: ['websocket']});
+      socket = io(url, $.extend({}, opt, {transports: ['websocket']}));
       setHash();
       socket.on('connect', function () {
         $("#submitEmit").prop('disabled', false);
@@ -131,7 +134,7 @@ function setHash() {
     if(messageIndex !== -1) {
       hashEvents.splice(messageIndex, 1);
     }
-    location.hash = "url="+window.btoa(url)+"&events="+hashEvents.join();
+    location.hash = "url="+window.btoa(url)+"&opt="+window.btoa(options)+"&events="+hashEvents.join();
   }
 }
 
@@ -139,12 +142,14 @@ function processHash () {
   var hash = location.hash.substr(1);
   if(hash.indexOf('url=') !== -1 && hash.indexOf('events=')  !== -1) {
     var hashUrl = window.atob(hash.substr(hash.indexOf('url=')).split('&')[0].split('=')[1]);
+    var hashOpt = window.atob(hash.substr(hash.indexOf('opt=')).split('&')[0].split('=')[1]);
     var hashEvents = hash.substr(hash.indexOf('events=')).split('&')[0].split('=')[1].split(',');
     $.merge(eventsToListen, hashEvents);
     $.each(hashEvents, function (index, value) {
       $('#eventPanels').prepend(makePanel(value));
     });
     $('#connect input:first').val(hashUrl);
+    $('#connect_options').val(hashOpt);
     $('#connect').submit();
   }
 }
