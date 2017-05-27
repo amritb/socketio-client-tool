@@ -134,7 +134,7 @@ function setHash() {
     if(messageIndex !== -1) {
       hashEvents.splice(messageIndex, 1);
     }
-    location.hash = "url="+window.btoa(url)+"opt="+window.btoa(options)+"&events="+hashEvents.join();
+    location.hash = "url="+window.btoa(url)+"&opt="+window.btoa(options)+"&events="+hashEvents.join();
   }
 }
 
