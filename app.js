@@ -29,36 +29,48 @@ $(function () {
 
   $("#connect").submit(function (e) {
     e.preventDefault();
-    url = $("#connect input:first").val().trim();
-    options = $("#connect_options").val().trim();
-    var opt = options ? JSON.parse(options) : null;
-    if(url === '') {
-      console.error('Invalid URL given');
-    } else {
-      socket = io(url, $.extend({}, opt, {transports: ['websocket']}));
-      setHash();
-      socket.on('connect', function () {
-        $("#submitEmit").prop('disabled', false);
-        clearInterval(disconnectedInerval);
-        document.title = title;
-        $('.disconnected-alert').hide();
-        $('.connected-alert').show().delay(5000).fadeOut(1000);
-        $("#connectionPanel").prepend('<p><span class="text-muted">'+getFormattedNowTime()+'</span> Connected</p>');
-      });
-      socket.on('disconnect', function (sock) {
-        $("#submitEmit").prop('disabled', true);
-        disconnectedInerval = setInterval(function(){
-          if(document.title === "Disconnected") {
-            document.title = title;
-          } else {
-            document.title = "Disconnected";
-          }
-        }, 800);
-        $('.disconnected-alert').hide();
-        $('.disconnected-alert').show();
-        $("#connectionPanel").prepend('<p><span class="text-muted">'+getFormattedNowTime()+'</span> Disconnected --> '+sock+'</p>');
-      });
-      registerEvents();
+    if($("#connect .btn").html().trim() === 'Connect'){
+      url = $("#connect input:first").val().trim();
+      options = $("#connect_options").val().trim();
+      var opt = options ? JSON.parse(options) : null;
+      if(url === '') {
+        console.error('Invalid URL given');
+      } else {
+        socket = io(url, $.extend({}, opt, {transports: ['websocket']}));
+        setHash();
+        socket.on('connect', function () {
+          $("#submitEmit").prop('disabled', false);
+          clearInterval(disconnectedInerval);
+          document.title = title;
+          $('.disconnected-alert').hide();
+          $('.connected-alert').show().delay(5000).fadeOut(1000);
+          $("#connectionPanel").prepend('<p><span class="text-muted">'+getFormattedNowTime()+'</span> Connected</p>');
+          $("#connect .btn").html('Disconnect');
+          $("#connect .btn").removeClass('btn-success');
+          $("#connect .btn").addClass('btn-danger');
+          $("#connect input").prop('disabled', true);
+        });
+        socket.on('disconnect', function (sock) {
+          $("#submitEmit").prop('disabled', true);
+          disconnectedInerval = setInterval(function(){
+            if(document.title === "Disconnected") {
+              document.title = title;
+            } else {
+              document.title = "Disconnected";
+            }
+          }, 800);
+          $('.disconnected-alert').hide();
+          $('.disconnected-alert').show();
+          $("#connectionPanel").prepend('<p><span class="text-muted">'+getFormattedNowTime()+'</span> Disconnected --> '+sock+'</p>');
+          $("#connect .btn").html('Connect');
+          $("#connect .btn").removeClass('btn-danger');
+          $("#connect .btn").addClass('btn-success');
+          $("#connect input").prop('disabled', false);
+        });
+        registerEvents();
+      }
+    }else{
+      socket.disconnect();
     }
   });
 
