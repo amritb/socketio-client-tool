@@ -6,43 +6,44 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Socket.io client tool</title>
-  <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.4/sandstone/bootstrap.min.css" rel="stylesheet">
+  <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/spacelab/bootstrap.min.css" rel="stylesheet">
   <style type="text/css">
-  .inline-right-margin {
-    margin-right: 10px;
-    width: 95%;
-  }
+    .inline-right-margin {
+      margin-right: 10px;
+      width: 95%;
+    }
 
-  .long-input {
-    width: 300px;
-  }
+    .long-input {
+      width: 300px;
+    }
 
-  .long-input input {
-    width: 98% !important;
-  }
+    .long-input input {
+      width: 98% !important;
+    }
 
-  #eventPanels .panel-body {
-    max-height: 318px;
-    overflow: scroll;
-    overflow-y: scroll;
-    overflow-x: hidden;
-  }
+    #eventPanels .panel-body {
+      max-height: 318px;
+      overflow: scroll;
+      overflow-y: scroll;
+      overflow-x: hidden;
+    }
 
-  .connection-alert {
-    width: 300px;
-    position: fixed;
-    bottom: 10px;
-    right: 30px;
-  }
-  .panel-title {
-    text-transform: initial !important;
-  }
+    .connection-alert {
+      width: 300px;
+      position: fixed;
+      bottom: 10px;
+      right: 30px;
+    }
 
-  #emitDataMenuButton {
-    margin-right: 0;
-  }
+    .panel-title {
+      text-transform: initial !important;
+    }
+
+    #emitDataMenuButton {
+      margin-right: 0;
+    }
   </style>
-  <meta property="og:image" content="http://amritb.github.io/socketio-client-tool/screenshot.png" />
+  <meta property="og:image" content="https://amritb.github.io/socketio-client-tool/screenshot.png" />
   <meta property="og:title" content="Socket.io Client Tool" />
   <meta property="og:description" content="This tools helps you to test socket.io servers." />
 </head>
@@ -66,7 +67,7 @@
           <div class="form-group long-input">
             <input type="text" class="form-control inline-right-margin" placeholder="Socket.io server URL">
           </div>
-           <div class="form-group long-input">
+          <div class="form-group long-input">
             <input id="connect_options" type="text" class="form-control inline-right-margin" placeholder="Socket.io options json">
           </div>
           <button type="submit" class="btn btn-success">Connect</button>
@@ -75,82 +76,83 @@
     </div>
   </nav>
   <div class="container">
-      <ul class="nav nav-tabs" role="tablist">
-          <li role="presentation">
-              <a href="#listening" aria-controls="profile" role="tab" data-toggle="tab">Listening</a>
-          </li>
-          <li role="presentation" class="active">
-              <a href="#emiting" aria-controls="home" role="tab" data-toggle="tab">Emiting</a>
-          </li>
-          <li role="presentation">
-              <a href="#emitHistory" aria-controls="history" role="tab" data-toggle="tab">Emit History</a>
-          </li>
-          <li role="presentation">
-              <a href="#emitAckRes" aria-controls="ackRes" role="tab" data-toggle="tab">Emiting AckRes</a>
-          </li>
-      </ul>
-      <div class="tab-content">
-        <div class="row tab-pane active" role="tabpanel" id="emiting">
-            <div class="col-sm-12">
-                <div id="emitPanel">
-                    <form id="emitData">
-                        <div class="form-group well">
-                            <div class="col-sm-5">
-                                <input type="text" class="form-control" id="event-name" placeholder="Event name">
-                            </div>
-                            <button id="submitEmit" type="submit" class="btn btn-success" disabled>Emit</button>
-                            <span class="label label-primary emitted-msg">Event emitted!</span>
-                            <span class="label label-danger emitted-failure-msg">Event failure</span>
-                        </div>
-                        <div class="form-group">
-                            <label class="radio-inline">
-                                <input id="emitAsPlaintext" type="radio" name="emitAs"
-                                      value="plaintext" checked="checked" />
-                                Send data as plaintext
-                            </label>
-                            <label class="radio-inline">
-                                <input id="emitAsJSON" type="radio" name="emitAs"
-                                      value="JSON" />
-                                Send data as JSON object
-                            </label>
-                        </div>
-                        <div class="form-group">
-                            <div id="plainTextData">
-                                <label for="data-text" class="control-label">Data: plaintext</label>
-                                <textarea class="form-control" id="data-text" ></textarea>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div id="jsonData">
-                                <div>
-                                    <label for="data-text" class="control-label">Data: JSON (key, value)</label>
-                                </div>
-                                <button id="addNewJsonField" type="button" class="btn btn-xs btn-warning">add new</button>
-                                <div class="form-inline">
-                                    <div class="form-group">
-                                        <input type="text" class="form-control key">
-                                    </div>
-                                    <div class="form-group">
-                                        <input type="text" class="form-control value">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-        <div class="row tab-pane" role="tabpanel" id="listening">
+    <ul class="nav nav-tabs" role="tablist">
+      <li role="presentation" class="active">
+        <a href="#listening" aria-controls="profile" role="tab" data-toggle="tab">Listening</a>
+      </li>
+      <li role="presentation">
+        <a href="#emiting" aria-controls="home" role="tab" data-toggle="tab">Emiting</a>
+      </li>
+      <li role="presentation">
+        <a href="#emitHistory" aria-controls="history" role="tab" data-toggle="tab">Emit History</a>
+      </li>
+      <li role="presentation">
+        <a href="#emitAckRes" aria-controls="ackRes" role="tab" data-toggle="tab">Emiting AckRes</a>
+      </li>
+    </ul>
+    <div class="tab-content">
+      <div class="row tab-pane" role="tabpanel" id="emiting">
+        <p>
           <div class="col-sm-12">
-              <div class="well">
-                <form id="addListener">
+            <div id="emitPanel">
+              <form id="emitData">
+                <div class="form-group well">
                   <div class="col-sm-5">
-                    <input type="text" class="eventName form-control" id="exampleInputEmail3" placeholder="Event name">
+                    <input type="text" class="form-control" id="event-name" placeholder="Event name">
                   </div>
-                    <button type="submit" class="btn btn-success">Listen</button>
-                    <span class="label label-danger listen-failure-msg">Can't add duplicated or empty listener</span>
-                    <span class="label label-primary listen-added-msg">Listener added</span>
-                </form>
+                  <button id="submitEmit" type="submit" class="btn btn-success" disabled>Emit</button>
+                  <span class="label label-primary emitted-msg">Event emitted!</span>
+                  <span class="label label-danger emitted-failure-msg">Event failure</span>
+                </div>
+                <div class="form-group">
+                  <label class="radio-inline">
+                    <input id="emitAsPlaintext" type="radio" name="emitAs" value="plaintext" checked="checked" />
+                    Send data as plaintext
+                  </label>
+                  <label class="radio-inline">
+                    <input id="emitAsJSON" type="radio" name="emitAs" value="JSON" />
+                    Send data as JSON object
+                  </label>
+                </div>
+                <div class="form-group">
+                  <div id="plainTextData">
+                    <label for="data-text" class="control-label">Data: plaintext</label>
+                    <textarea class="form-control" id="data-text"></textarea>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div id="jsonData">
+                    <div>
+                      <label for="data-text" class="control-label">Data: JSON (key, value)</label>
+                    </div>
+                    <button id="addNewJsonField" type="button" class="btn btn-xs btn-warning">add new</button></br>
+                    <div class="form-inline">
+                      <div class="form-group">
+                        <input type="text" class="form-control key">
+                      </div>
+                      <div class="form-group">
+                        <input type="text" class="form-control value">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </p>
+      </div>
+      <div class="row tab-pane active" role="tabpanel" id="listening">
+        <p>
+          <div class="col-sm-12">
+            <div class="well">
+              <form id="addListener">
+                <div class="col-sm-5">
+                  <input type="text" class="eventName form-control" id="exampleInputEmail3" placeholder="Event name">
+                </div>
+                <button type="submit" class="btn btn-success">Listen</button>
+                <span class="label label-danger listen-failure-msg">Can't add duplicated or empty listener</span>
+                <span class="label label-primary listen-added-msg">Listener added</span>
+              </form>
             </div>
           </div>
           <div class="col-sm-12">
@@ -166,28 +168,33 @@
               </div>
             </div>
           </div>
-        </div>
-        <div class="row tab-pane" role="tabpanel" id="emitAckRes">
+        </p>
+      </div>
+      <div class="row tab-pane" role="tabpanel" id="emitAckRes">
+        <p>
           <div class="col-sm-12">
             <div id="emitAckResPanels">
               <!--wait emiting-->
             </div>
           </div>
-        </div>
-        <div class="row tab-pane" role="tabpanel" id="emitHistory">
-            <div class="col-sm-12">
-              <div id="emitHistoryPanels">
-                <!--wait emiting-->
-              </div>
+        </p>
+      </div>
+      <div class="row tab-pane" role="tabpanel" id="emitHistory">
+        <p>
+          <div class="col-sm-12">
+            <div id="emitHistoryPanels">
+              <!--wait emiting-->
             </div>
-            <div class="col-sm-12">
-                <div class="well">
-                  <form id="clearHistory">
-                      <button type="submit" class="btn btn-success">Clear ALL History</button>
-                  </form>
-              </div>
+          </div>
+          <div class="col-sm-12">
+            <div class="well">
+              <form id="clearHistory">
+                <button type="submit" class="btn btn-success">Clear ALL History</button>
+              </form>
             </div>
-        </div>
+          </div>
+        </p>
+      </div>
     </div>
   </div>
 
@@ -199,29 +206,29 @@
   </div>
 
   <script type="text/html" id="historyContent">
-      <div class="row">
-        <form id="form[[id]]">
-          <div class="col-sm-2">
-            <span class="text-muted">[[time]]</span>
-          </div>
-          <div class="col-sm-6">
-            <input type="text" class="form-control" name="reqData" value='[[reqData]]'/>
-          </div>
-          <div class="col-sm-4">
-            <button type="submit" class="btn btn-success">Emit</button>
-            <span class="label label-primary emitted-msg-[[id]]" style="display:none">Event emitted!</span>
-            <span class="label label-danger emitted-failure-msg-[[id]]" style="display:none">Event failure</span>
-            <input type="hidden" name="historyId" value="[[id]]">
-            <input type="hidden" name="event" value="[[event]]">
-          </div>
-        </form>
-      </div>
+    <div class="row">
+      <form id="form[[id]]">
+        <div class="col-sm-2">
+          <span class="text-muted">[[time]]</span>
+        </div>
+        <div class="col-sm-6">
+          <input type="text" class="form-control" name="reqData" value='[[reqData]]' />
+        </div>
+        <div class="col-sm-4">
+          <button type="submit" class="btn btn-success">Emit</button>
+          <span class="label label-primary emitted-msg-[[id]]" style="display:none">Event emitted!</span>
+          <span class="label label-danger emitted-failure-msg-[[id]]" style="display:none">Event failure</span>
+          <input type="hidden" name="historyId" value="[[id]]">
+          <input type="hidden" name="event" value="[[event]]">
+        </div>
+      </form>
+    </div>
   </script>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.1/socket.io.slim.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pouchdb/6.1.2/pouchdb.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pouchdb/6.2.0/pouchdb.min.js"></script>
   <script src="app.js"></script>
 </body>
 
