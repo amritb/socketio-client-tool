@@ -1,0 +1,23 @@
+{
+  "name": "socketio-server",
+  "version": "1.0.0",
+  "description": "A simple socket.io server to test the client tool",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/amritb/socketio-client-tool.git"
+  },
+  "author": "Amrit Bera",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/amritb/socketio-client-tool/issues"
+  },
+  "homepage": "https://github.com/amritb/socketio-client-tool#readme",
+  "dependencies": {
+    "socket.io": "^2.0.1"
+  }
+}
