@@ -6,6 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Socket.io client tool</title>
+  <link rel="shortcut icon" type="image/png" href="favicon.png">
   <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/spacelab/bootstrap.min.css" rel="stylesheet">
   <style type="text/css">
     .inline-right-margin {
@@ -33,6 +34,10 @@
       position: fixed;
       bottom: 10px;
       right: 30px;
+    }
+
+    .panel-heading > button {
+      margin-left: 10px;
     }
 
     .panel-title {
@@ -150,6 +155,7 @@
                   <input type="text" class="eventName form-control" id="exampleInputEmail3" placeholder="Event name">
                 </div>
                 <button type="submit" class="btn btn-success">Listen</button>
+                <button type="button" class="btn btn-warning pull-right" onclick="clearAllEvents()">Clear All Events</button>
                 <span class="label label-danger listen-failure-msg">Can't add duplicated or empty listener</span>
                 <span class="label label-primary listen-added-msg">Listener added</span>
               </form>
@@ -161,6 +167,8 @@
                 <div class="panel-heading">
                   <button type="button" class="btn btn-warning btn-xs pull-right" data-toggle="collapse" data-target="#connectionPanel" aria-expanded="false" aria-controls="connectionPanel">
                     Toggle panel</button>
+                  <button type="button" class="btn btn-warning btn-xs pull-right" onclick="clearEvents('connectionPanel')">
+                    Clear Events</button>
                   <h3 class="panel-title">On "connect / disconnect" Events</h3>
                 </div>
                 <div id="connectionPanel" class="panel-body">
