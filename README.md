@@ -1,7 +1,7 @@
 # [socketio-client-tool](http://amritb.github.io/socketio-client-tool/)
 This tools helps you to test socket.io servers.
 
-<img src="http://amritb.github.io/socketio-client-tool/screenshot.png" alt="Socket.io Client Too"></img>
+<img src="https://amritb.github.io/socketio-client-tool/screenshot.png" alt="Socket.io Client Tool"></img>
 
 ### TODOs
 1. ~~Functional event emit modal~~
