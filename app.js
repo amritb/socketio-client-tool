@@ -188,6 +188,21 @@ function registerEvents() {
   }
 }
 
+function clearEvents(event) {
+  if (event === 'connectionPanel') {
+    $('#connectionPanel').empty();
+  } else {
+    $('#eventPanels').find("[data-windowId='" + event + "']").empty();
+  }
+}
+
+function clearAllEvents() {
+  $('#eventPanels').find('.panel-body')
+    .each(function() {
+      $(this).empty();
+    });
+}
+
 function parseJSONForm() {
   var result = "{";
   var formInputs = $('#jsonData').find('.form-inline');
@@ -208,7 +223,16 @@ function parseJSONForm() {
 }
 
 function makePanel(event) {
-  return '<div class="panel panel-primary"> <div class="panel-heading"> <button type="button" class="btn btn-warning btn-xs pull-right" data-toggle="collapse" data-target="#panel-' + event + '-content" aria-expanded="false" aria-controls="panel-' + event + '-content">Toggle panel</button> <h3 class="panel-title">On "' + event + '" Events</h3> </div> <div data-windowId="' + event + '" class="panel-body collapse in" id="panel-' + event + '-content"></div> </div>';
+  return `
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <button type="button" class="btn btn-warning btn-xs pull-right" data-toggle="collapse" data-target="#panel-` + event + `-content" aria-expanded="false" aria-controls="panel-` + event + `-content">Toggle panel</button>
+        <button type="button" class="btn btn-warning btn-xs pull-right" onclick="clearEvents('` + event + `')">Clear Events</button>
+        <h3 class="panel-title">On "` + event + `" Events</h3>
+      </div>
+      <div data-windowId="` + event + `" class="panel-body collapse in" id="panel-` + event + `-content">
+      </div>
+    </div>`;
 }
 
 function getFormattedNowTime() {
