@@ -306,7 +306,7 @@ function emit(event, data, panelId) {
   };
   socket.emit(event, data, function(res) {
     var elementToExtend = $("#emitAckResPanels").find("[data-windowId='" + panelId + "']");
-    elementToExtend.prepend('<p><span class="text-muted">' + getFormattedNowTime() + '</span><strong> ' + JSON.stringify(res) + '</strong></p>');
+    elementToExtend.prepend('<p><span class="text-muted">' + getFormattedNowTime() + '</span><strong class="word-break-all"> ' + JSON.stringify(res) + '</strong></p>');
   });
 }
 
