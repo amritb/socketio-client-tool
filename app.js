@@ -100,7 +100,12 @@ $(function() {
         data = parseJSONForm();
       }
       if ($('#emitAsPlaintext').is(":checked")) {
-        data = $("#emitData #data-text").val().trim();
+        var text = $("#emitData #data-text").val().trim();
+        try {
+          data = JSON.parse(text);
+        } catch (ex) {
+          data = text;
+        }
       }
       if (event !== '' && data !== '') {
         var emitData = {
