@@ -4,7 +4,7 @@
   "description": "This tools helps you to test socket.io servers.",
   "license": "MIT",
   "scripts": {
-    "start": "node node_modules/http-server/bin/http-server"
+    "start": "http-server"
   },
   "repository": {
     "type": "git",
