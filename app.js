@@ -163,6 +163,7 @@ function setHash() {
 
 function processHash() {
   var hash = location.hash.substr(1);
+  hash = decodeURI(hash);
   if (hash.indexOf('url=') !== -1 && hash.indexOf('events=') !== -1) {
     var hashUrl = window.atob(hash.substr(hash.indexOf('url=')).split('&')[0].split('=')[1]);
     var hashOpt = window.atob(hash.substr(hash.indexOf('opt=')).split('&')[0].split('=')[1]);
