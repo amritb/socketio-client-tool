@@ -39,6 +39,41 @@ npm start
 npm start -- -p 8099
 ```
 
+### Docker
+
+1. Clone this repository: (Todo: This will not be needed if the image is hosted)
+
+```bash
+git clone https://github.com/amritb/socketio-client-tool.git
+```
+
+2. Navigate to the cloned directory: (Todo: This will not be needed if the image is hosted)
+
+```bash
+cd socketio-client-tool
+```
+
+3. Build the image: (Todo: This will not be needed if the image is hosted)
+
+```bash
+docker build . -t amritb/socketio-client-tool:latest
+```
+
+4. Run the container
+
+```bash
+docker run -p 8080:8080 amritb/socketio-client-tool:latest
+```
+
+(Optional) Run using docker-compose
+
+```bash
+  socketio-client-tool:
+    image: amritb/socketio-client-tool:latest
+    ports:
+      - "8080:8080"
+```
+
 ## TODOs
 1. ~~Functional event emit modal~~
 2. ~~Add events and socket.io URL to page URL so that it can be shared with set inputs~~
