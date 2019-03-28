@@ -5,6 +5,25 @@ This tools helps you to test socket.io servers.
 
 The [URL](http://amritb.github.io/socketio-client-tool/) should work in most cases. But if you want to run it locally, follow these instructions: 
 
+#### Docker
+
+If you would like to run this tool as a container using [Docker](https://www.docker.com/), follow the below instructions.
+
+1. Run the container
+
+```bash
+docker run -p 8080:8080 amritb/socketio-client-tool:latest
+```
+
+(Optional) Run using docker-compose
+
+```bash
+  socketio-client-tool:
+    image: amritb/socketio-client-tool:latest
+    ports:
+      - "8080:8080"
+```
+
 #### Command Line
 
 To run using the server (http-server) that is included with this tool. Follow the below instructions:
@@ -37,25 +56,6 @@ npm start
 
 ```bash
 npm start -- -p 8099
-```
-
-#### Docker
-
-If you would like to run this tool as a container using [Docker](https://www.docker.com/), follow the below instructions.
-
-1. Run the container
-
-```bash
-docker run -p 8080:8080 amritb/socketio-client-tool:latest
-```
-
-(Optional) Run using docker-compose
-
-```bash
-  socketio-client-tool:
-    image: amritb/socketio-client-tool:latest
-    ports:
-      - "8080:8080"
 ```
 
 ## TODOs
