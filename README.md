@@ -3,7 +3,7 @@ This tools helps you to test socket.io servers.
 
 <img src="https://amritb.github.io/socketio-client-tool/screenshot.png" alt="Socket.io Client Tool"></img>
 
-You can put any valid socket.io server url on the UI and use this tool against it. Or you can use the dummy server from this repo. For that, follow these instructions: 
+The [URL](http://amritb.github.io/socketio-client-tool/) should work in most cases. But if you want to run it locally, follow these instructions: 
 
 #### Command Line
 
@@ -46,14 +46,14 @@ If you would like to run this tool as a container using [Docker](https://www.doc
 1. Run the container
 
 ```bash
-docker run -p 8080:8080 amritb/socketio-tool-server:latest
+docker run -p 8080:8080 amritb/socketio-client-tool:latest
 ```
 
 (Optional) Run using docker-compose
 
 ```bash
   socketio-client-tool:
-    image: amritb/socketio-tool-server:latest
+    image: amritb/socketio-client-tool:latest
     ports:
       - "8080:8080"
 ```
