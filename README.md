@@ -7,7 +7,7 @@ This tools helps you to test socket.io servers.
 
 ### Command Line
 
-Assuming nodejs is installed on the machine:
+To run using the server (http-server) that is included with this tool. Follow the below instructions:
 
 1. Clone this repository:
 
@@ -40,6 +40,8 @@ npm start -- -p 8099
 ```
 
 ### Docker
+
+If you would like to run this tool as a container using [Docker](https://www.docker.com/), follow the below instructions.
 
 1. Clone this repository: (Todo: This will not be needed if the image is hosted)
 
