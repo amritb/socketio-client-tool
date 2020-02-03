@@ -14,18 +14,22 @@
       width: 95%;
     }
 
-    .long-input {
-      width: 300px;
+    .short-input {
+      width: 150px;
     }
 
-    .long-input input {
+    .long-input {
+      width: 250px;
+    }
+
+    .long-input input,
+    .short-input input {
       width: 98% !important;
     }
 
     #eventPanels .panel-body {
       max-height: 318px;
       overflow: scroll;
-      overflow-y: scroll;
       overflow-x: hidden;
     }
 
@@ -68,18 +72,24 @@
       <p class="navbar-text">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<iframe src="https://ghbtns.com/github-btn.html?user=amritb&repo=socketio-client-tool&type=star&count=true&size=small" frameborder="0" scrolling="0" width="170px" height="20px"></iframe></p>
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <p class="navbar-text navbar-right">&nbsp; &nbsp;</p>
-        <form id="connect" class="navbar-form navbar-right" role="search" style="margin-right: -30px;">
+
+        <form id="connect" class="navbar-form navbar-right" role="search">
           <div class="form-group long-input">
-            <input type="text" class="form-control inline-right-margin" placeholder="Socket.io server URL">
+            <input id="socketUrl" type="text" class="form-control inline-right-margin" placeholder="Socket.io server URL" />
+          </div>
+          <div class="form-group short-input">
+            <input id="socketPath" type="text" class="form-control inline-right-margin" placeholder="Path (/socket.io)" />
           </div>
           <div class="form-group long-input">
-            <input id="connect_options" type="text" class="form-control inline-right-margin" placeholder="Socket.io options json">
+            <input id="socketOptions" type="text" class="form-control inline-right-margin" placeholder="Socket.io options json" />
           </div>
+
           <button type="submit" class="btn btn-success">Connect</button>
         </form>
       </div>
     </div>
   </nav>
+
   <div class="container">
     <ul class="nav nav-tabs" role="tablist">
       <li role="presentation" class="active">
