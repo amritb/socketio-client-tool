@@ -76,6 +76,7 @@ $(function() {
       socket.on('connect', function () {
         clearTimeout(connectionTimeout);
         setFormInputs(true, false);
+        setSocketDetails(socket);
 
         setHash();
 
@@ -92,8 +93,13 @@ $(function() {
       });
 
       socket.on('disconnect', function (sock) {
+        socket = null;
+
         $("#submitEmit").prop('disabled', true);
         setFormInputs(false, false);
+        setSocketDetails(null);
+
+        $('#socketInfo span').text('');
 
         disconnectedInterval = setInterval(function () {
           if (document.title === "Disconnected") {
@@ -137,7 +143,7 @@ $(function() {
 
 
   $("#emitData").submit(function(e) {
-    if (socket.io) {
+    if (socket && socket.io) {
       var event = $("#emitData #event-name").val().trim();
       var data;
       if ($('#emitAsJSON').is(":checked")) {
@@ -185,7 +191,7 @@ $(function() {
   });
 
 
-  $("#clearHistory").submit(function(e) {
+  $("#clearHistory").on('submit',function(e) {
     e.preventDefault();
     initDB(true);
     $('#emitHistoryPanels').empty();
@@ -199,6 +205,18 @@ $(function() {
 function setFormInputs(disableForm, disableSubmit) {
   $("#connect input").prop('disabled', disableForm);
   $("#connect .btn").prop('disabled', disableSubmit);
+}
+
+function setSocketDetails(socket) {
+  const socketInfo = $('#socketInfo');
+
+  if (socket) {
+    socketInfo.show();
+    $('#socketInfo .well .details').append(`<div>Id: ${socket.id}</div><div>Connected: ${new Date()}</div>`);
+  } else {
+    socketInfo.hide();
+    $('#socketInfo .well .details').html('');
+  }
 }
 
 function setHash() {
@@ -240,7 +258,7 @@ function processHash() {
 }
 
 function registerEvents() {
-  if (socket.io) {
+  if (socket && socket.io) {
     $.each(eventsToListen, function(index, value) {
       socket.on(value, function(data) {
         if (!data) {
@@ -360,17 +378,19 @@ function postDataIntoDB(data, callback) {
 
 function emit(event, data, panelId) {
   console.log('Emitter - emitted: ' + data);
-  var panel = $("#emitAckResPanels").find("[data-windowId='" + panelId + "']");
-  if (panel.length == 0) {
+  const panel = $("#emitAckResPanels").find("[data-windowId='" + panelId + "']");
+  if (panel.length === 0) {
     $('#emitAckResPanels').prepend(makePanel(panelId));
   }
-  var emitData = {
+
+  const emitData = {
     event: event,
     request: data,
     time: getFormattedNowTime()
   };
+
   socket.emit(event, data, function(res) {
-    var elementToExtend = $("#emitAckResPanels").find("[data-windowId='" + panelId + "']");
+    const elementToExtend = $("#emitAckResPanels").find("[data-windowId='" + panelId + "']");
     elementToExtend.prepend('<p><span class="text-muted">' + getFormattedNowTime() + '</span><strong> ' + JSON.stringify(res) + '</strong></p>');
   });
 }
@@ -378,7 +398,7 @@ function emit(event, data, panelId) {
 function addHistoryPanel(history) {
   var histPanelId = history.event;
   var panel = $("#emitHistoryPanels").find("[data-windowId='" + histPanelId + "']");
-  if (panel.length == 0) {
+  if (panel.length === 0) {
     $('#emitHistoryPanels').prepend(makePanel(histPanelId));
   }
   var elementToExtend = $("#emitHistoryPanels").find("[data-windowId='" + histPanelId + "']");

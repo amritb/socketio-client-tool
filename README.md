@@ -65,8 +65,8 @@ npm start -- -p 8099
 4. ~~Store history of emits - and can be re-sent in just one click~~
 5. ~~Change timestamps to better formatted time~~
 6. Fix URL hashes - if the has only has url value, initiate the app with the connected URL, and no extra event should be added
-7. Show socket.id somewhere in the UI (easy to copy)
-8. Helper links/buttons to add basic socketio evnets like reconnect, etc.
+7. ~~Show socket.id somewhere in the UI (easy to copy)~~
+8. Helper links/buttons to add basic socketio events like reconnect, etc.
 9. Page titles should show the socket.io connection urls
 10. ~~Clear button on panels~~
 11. Emit buttons on panel headers - which will prefill the emit form's message input field
