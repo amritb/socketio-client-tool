@@ -1,12 +1,19 @@
 'use strict';
 
-var eventsToListen = ['message'];
-var socket = {};
-var disconnectedInerval;
-var url = '';
-var options = '';
-var title = document.title;
-var localdb = null;
+let eventsToListen = ['message'];
+let socket = {};
+let disconnectedInterval = null;
+let connectionTimeout = null;
+let title = document.title;
+let localdb = null;
+
+const form = {
+  url: '',
+  path: '',
+  options: null,
+};
+
+const CONNECTION_TIMEOUT_MS = 10 * 1000;
 
 $(function() {
   $('#jsonData').hide();
@@ -27,54 +34,95 @@ $(function() {
     }
   });
 
-  $("#connect").submit(function(e) {
+
+  $("#connect").on('submit',function(e) {
+    const connectButton = $("#connect .btn");
     e.preventDefault();
-    if ($("#connect .btn").html().trim() === 'Connect') {
-      url = $("#connect input:first").val().trim();
-      options = $("#connect_options").val().trim();
-      var opt = options ? JSON.parse(options) : null;
-      if (url === '') {
-        console.error('Invalid URL given');
-      } else {
-        socket = io(url, $.extend({}, opt, {
-          transports: ['websocket']
-        }));
-        setHash();
-        socket.on('connect', function() {
-          $("#submitEmit").prop('disabled', false);
-          clearInterval(disconnectedInerval);
-          document.title = title;
-          $('.disconnected-alert').hide();
-          $('.connected-alert').show().delay(5000).fadeOut(1000);
-          $("#connectionPanel").prepend('<p><span class="text-muted">' + getFormattedNowTime() + '</span> Connected</p>');
-          $("#connect .btn").html('Disconnect');
-          $("#connect .btn").removeClass('btn-success');
-          $("#connect .btn").addClass('btn-danger');
-          $("#connect input").prop('disabled', true);
-        });
-        socket.on('disconnect', function(sock) {
-          $("#submitEmit").prop('disabled', true);
-          disconnectedInerval = setInterval(function() {
-            if (document.title === "Disconnected") {
-              document.title = title;
-            } else {
-              document.title = "Disconnected";
-            }
-          }, 800);
-          $('.disconnected-alert').hide();
-          $('.disconnected-alert').show();
-          $("#connectionPanel").prepend('<p><span class="text-muted">' + getFormattedNowTime() + '</span> Disconnected --> ' + sock + '</p>');
-          $("#connect .btn").html('Connect');
-          $("#connect .btn").removeClass('btn-danger');
-          $("#connect .btn").addClass('btn-success');
-          $("#connect input").prop('disabled', false);
-        });
-        registerEvents();
+
+    if (connectButton.html().trim() === 'Connect') {
+      form.url = $("#socketUrl").val().trim();
+      form.path = $("#socketPath").val().trim();
+      form.options = $("#socketOptions").val().trim();
+
+      try {
+        form.options = (form.options ? JSON.parse(form.options) : null);
+      } catch (err) {
+        alert('Invalid JSON options: ' + err.message);
+        return;
       }
+
+      if (form.url === '') {
+        alert('Invalid URL given');
+        return;
+      }
+
+      const socketOptions = $.extend({}, {path: form.path}, form.options, {
+        transports: ['websocket']
+      });
+
+      console.log('Connecting to: ' + form.url + ' with options: ' + JSON.stringify(socketOptions));
+
+      setFormInputs(true, true);
+      socket = io(form.url, socketOptions);
+
+      connectionTimeout = setTimeout(function() {
+        socket.close();
+        socket = null;
+
+        alert('Connection to ' + form.url + ' timed out!');
+        setFormInputs(false, false);
+      }, CONNECTION_TIMEOUT_MS);
+
+      socket.on('connect', function () {
+        clearTimeout(connectionTimeout);
+        setFormInputs(true, false);
+        setSocketDetails(socket);
+
+        setHash();
+
+        $("#submitEmit").prop('disabled', false);
+        clearInterval(disconnectedInterval);
+        document.title = title;
+        $('.disconnected-alert').hide();
+        $('.connected-alert').show().delay(5000).fadeOut(1000);
+        $("#connectionPanel").prepend('<p><span class="text-muted">' + getFormattedNowTime() + '</span> Connected</p>');
+
+        connectButton.html('Disconnect');
+        connectButton.removeClass('btn-success');
+        connectButton.addClass('btn-danger');
+      });
+
+      socket.on('disconnect', function (sock) {
+        socket = null;
+
+        $("#submitEmit").prop('disabled', true);
+        setFormInputs(false, false);
+        setSocketDetails(null);
+
+        $('#socketInfo span').text('');
+
+        disconnectedInterval = setInterval(function () {
+          if (document.title === "Disconnected") {
+            document.title = title;
+          } else {
+            document.title = "Disconnected";
+          }
+        }, 800);
+
+        $('.disconnected-alert').hide();
+        $('.disconnected-alert').show();
+        $("#connectionPanel").prepend('<p><span class="text-muted">' + getFormattedNowTime() + '</span> Disconnected --> ' + sock + '</p>');
+        connectButton.html('Connect');
+        connectButton.removeClass('btn-danger');
+        connectButton.addClass('btn-success');
+      });
+
+      registerEvents();
     } else {
       socket.disconnect();
     }
   });
+
 
   $("#addListener").submit(function(e) {
     e.preventDefault();
@@ -85,6 +133,7 @@ $(function() {
       $("#addListener input:first").val('');
       setHash();
       registerEvents();
+
       $('.listen-added-msg').show().delay(1000).fadeOut(1000);
     } else {
       $('.listen-failure-msg').show().delay(1500).fadeOut(1000);
@@ -92,8 +141,9 @@ $(function() {
     }
   });
 
+
   $("#emitData").submit(function(e) {
-    if (socket.io) {
+    if (socket && socket.io) {
       var event = $("#emitData #event-name").val().trim();
       var data;
       if ($('#emitAsJSON').is(":checked")) {
@@ -127,11 +177,13 @@ $(function() {
     e.preventDefault();
   });
 
+
   $("#addNewJsonField").click(function(e) {
     e.preventDefault();
     var template = "<div class=\"form-inline\"><div class=\"form-group\"><input type=\"text\" class=\"form-control key\"></div> <div class=\"form-group\"><input type=\"text\" class=\"form-control value\"></div> <div class=\"form-group\"><button class=\"btn btn-xs btn-danger remove\" type=\"button\">remove</button></div></div>";
     $("#jsonData").append(template);
   });
+
 
   $("#jsonData").on('click', '.remove', function(e) {
     e.preventDefault();
@@ -139,7 +191,7 @@ $(function() {
   });
 
 
-  $("#clearHistory").submit(function(e) {
+  $("#clearHistory").on('submit',function(e) {
     e.preventDefault();
     initDB(true);
     $('#emitHistoryPanels').empty();
@@ -150,38 +202,63 @@ $(function() {
   initHistory();
 });
 
+function setFormInputs(disableForm, disableSubmit) {
+  $("#connect input").prop('disabled', disableForm);
+  $("#connect .btn").prop('disabled', disableSubmit);
+}
+
+function setSocketDetails(socket) {
+  const socketInfo = $('#socketInfo');
+
+  if (socket) {
+    socketInfo.show();
+    $('#socketInfo .well .details').append(`<div>Id: ${socket.id}</div><div>Connected: ${new Date()}</div>`);
+  } else {
+    socketInfo.hide();
+    $('#socketInfo .well .details').html('');
+  }
+}
+
 function setHash() {
-  if (url !== '' && eventsToListen.length > 0) {
-    var hashEvents = eventsToListen.slice();
-    var messageIndex = hashEvents.indexOf('message');
+  if (form.url !== '' && eventsToListen.length > 0) {
+    const hashEvents = eventsToListen.slice();
+    const messageIndex = hashEvents.indexOf('message');
+
     if (messageIndex !== -1) {
       hashEvents.splice(messageIndex, 1);
     }
-    location.hash = "url=" + window.btoa(url) + "&opt=" + window.btoa(options) + "&events=" + hashEvents.join();
+
+    location.hash = 'url=' + window.btoa(form.url) + '&path=' + window.btoa(form.path) + '&opt=' + window.btoa(form.options ? JSON.stringify(form.options) : '') + '&events=' + hashEvents.join();
   }
 }
 
 function processHash() {
-  var hash = location.hash.substr(1);
+  let hash = location.hash.substr(1);
   hash = decodeURI(hash);
+
   if (hash.indexOf('url=') !== -1 && hash.indexOf('events=') !== -1) {
-    var hashUrl = window.atob(hash.substr(hash.indexOf('url=')).split('&')[0].split('=')[1]);
-    var hashOpt = window.atob(hash.substr(hash.indexOf('opt=')).split('&')[0].split('=')[1]);
-    var hashEvents = hash.substr(hash.indexOf('events=')).split('&')[0].split('=')[1].split(',');
+    const hashUrl = window.atob(hash.substr(hash.indexOf('url=')).split('&')[0].split('=')[1]);
+    const hashPath = window.atob(hash.substr(hash.indexOf('path=')).split('&')[0].split('=')[1]);
+    const hashOpt = window.atob(hash.substr(hash.indexOf('opt=')).split('&')[0].split('=')[1]);
+    const hashEvents = hash.substr(hash.indexOf('events=')).split('&')[0].split('=')[1].split(',');
+
     $.merge(eventsToListen, hashEvents);
     $.each(hashEvents, function(index, value) {
       if (value !== '') {
         $('#eventPanels').prepend(makePanel(value));
       }
     });
-    $('#connect input:first').val(hashUrl);
-    $('#connect_options').val(hashOpt);
+
+    $('#socketUrl').val(hashUrl);
+    $('#socketPath').val(hashPath);
+    $('#socketOptions').val(hashOpt);
+
     $('#connect').submit();
   }
 }
 
 function registerEvents() {
-  if (socket.io) {
+  if (socket && socket.io) {
     $.each(eventsToListen, function(index, value) {
       socket.on(value, function(data) {
         if (!data) {
@@ -301,17 +378,19 @@ function postDataIntoDB(data, callback) {
 
 function emit(event, data, panelId) {
   console.log('Emitter - emitted: ' + data);
-  var panel = $("#emitAckResPanels").find("[data-windowId='" + panelId + "']");
-  if (panel.length == 0) {
+  const panel = $("#emitAckResPanels").find("[data-windowId='" + panelId + "']");
+  if (panel.length === 0) {
     $('#emitAckResPanels').prepend(makePanel(panelId));
   }
-  var emitData = {
+
+  const emitData = {
     event: event,
     request: data,
     time: getFormattedNowTime()
   };
+
   socket.emit(event, data, function(res) {
-    var elementToExtend = $("#emitAckResPanels").find("[data-windowId='" + panelId + "']");
+    const elementToExtend = $("#emitAckResPanels").find("[data-windowId='" + panelId + "']");
     elementToExtend.prepend('<p><span class="text-muted">' + getFormattedNowTime() + '</span><strong> ' + JSON.stringify(res) + '</strong></p>');
   });
 }
@@ -319,7 +398,7 @@ function emit(event, data, panelId) {
 function addHistoryPanel(history) {
   var histPanelId = history.event;
   var panel = $("#emitHistoryPanels").find("[data-windowId='" + histPanelId + "']");
-  if (panel.length == 0) {
+  if (panel.length === 0) {
     $('#emitHistoryPanels').prepend(makePanel(histPanelId));
   }
   var elementToExtend = $("#emitHistoryPanels").find("[data-windowId='" + histPanelId + "']");
