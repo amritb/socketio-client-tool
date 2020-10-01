@@ -145,7 +145,7 @@
                 <div class="form-group">
                   <div id="jsonData">
                     <div>
-                      <label for="data-text" class="control-label">Data: JSON (key, value)</label>
+                      <label for="data-text" class="control-label">Data: JSON (key, value, type)</label>
                     </div>
                     <button id="addNewJsonField" type="button" class="btn btn-xs btn-warning">add new</button></br>
                     <div class="form-inline">
@@ -154,6 +154,13 @@
                       </div>
                       <div class="form-group">
                         <input type="text" class="form-control value">
+                      </div>
+                      <div class="form-group">
+                        <select class="form-control type">
+                          <option value="string">String</option>
+                          <option value="number">Number</option>
+                          <option value="boolean">Boolean</option>
+                        </select>
                       </div>
                     </div>
                   </div>
