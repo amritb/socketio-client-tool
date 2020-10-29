@@ -178,9 +178,9 @@ $(function() {
   });
 
 
-  $("#addNewJsonField").click(function(e) {
+  $("#addNewJsonField").on('click', function(e) {
     e.preventDefault();
-    var template = "<div class=\"form-inline\"><div class=\"form-group\"><input type=\"text\" class=\"form-control key\"></div> <div class=\"form-group\"><input type=\"text\" class=\"form-control value\"></div> <div class=\"form-group\"><button class=\"btn btn-xs btn-danger remove\" type=\"button\">remove</button></div></div>";
+    var template = "<div class=\"form-inline\"><div class=\"form-group\"><input type=\"text\" class=\"form-control key\"></div> <div class=\"form-group\"><input type=\"text\" class=\"form-control value\"></div> <div class=\"form-group\"><select class=\"form-control type\"><option value=\"string\">String</option><option value=\"number\">Number</option><option value=\"boolean\">Boolean</option></select></div> <div class=\"form-group\"><button class=\"btn btn-xs btn-danger remove\" type=\"button\">remove</button></div></div>";
     $("#jsonData").append(template);
   });
 
@@ -287,22 +287,24 @@ function clearAllEvents() {
 }
 
 function parseJSONForm() {
-  var result = "{";
+  var result = {};
   var formInputs = $('#jsonData').find('.form-inline');
   formInputs.each(function(index, el) {
     var key = $(el).find('.key').val().trim();
     if (!key.length) {
       return true;
     }
-    result += "\"" + key + "\"";
-    result += (" : ");
-    result += "\"" + ($(el).find('.value').val().trim()) + "\"";
-    result += ",";
+    var type = $(el).find('.type').val();
+    if(type == "boolean"){
+      result[key] = $(el).find('.value').val().toLowerCase() == "true";
+    } else if(type == "number"){
+      result[key] = parseInt($(el).find('.value').val());
+    } else{
+      result[key] = $(el).find('.value').val().trim();
+    }
   });
-  result = result.slice(0, -1);
-  result += "}";
   console.log("json to emit " + result);
-  return JSON.parse(result);
+  return result;
 }
 
 function makePanel(event) {
