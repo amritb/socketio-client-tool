@@ -93,7 +93,6 @@ $(function() {
       });
 
       socket.on('disconnect', function (sock) {
-        socket = null;
 
         $("#submitEmit").prop('disabled', true);
         setFormInputs(false, false);
