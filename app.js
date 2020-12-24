@@ -274,7 +274,7 @@ function clearEvents(event) {
   if (event === 'connectionPanel') {
     $('#connectionPanel').empty();
   } else {
-    $('#eventPanels').find("[data-windowId='" + event + "']").empty();
+    $('.tab-content').find("[data-windowId='" + event + "']").empty();
   }
 }
 
