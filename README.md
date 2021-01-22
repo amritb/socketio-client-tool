@@ -12,17 +12,8 @@ If you would like to run this tool as a container using [Docker](https://www.doc
 1. Run the container
 
     ```bash
-    docker run -p 8080:8080 amritb/socketio-client-tool:latest
+    docker run --rm -p 8080:8080 amritb/socketio-client-tool:latest
     ```
-
-(Optional) Run using docker-compose
-
-```bash
-  socketio-client-tool:
-    image: amritb/socketio-client-tool:latest
-    ports:
-      - "8080:8080"
-```
 
 #### Command Line
 
