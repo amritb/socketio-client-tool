@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Socket.io client tool</title>
+  <link rel="shortcut icon" type="image/png" href="favicon.png">
+  <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/spacelab/bootstrap.min.css" rel="stylesheet">
+  <style type="text/css">
+    .navbar-text.ghbtns {
+      margin: 12px -4px;
+    }
+
+    .inline-right-margin {
+      margin-right: 10px;
+      width: 95%;
+    }
+
+    .short-input {
+      width: 150px;
+    }
+
+    .long-input {
+      width: 250px;
+    }
+
+    .long-input input,
+    .short-input input {
+      width: 98% !important;
+    }
+
+    #eventPanels .panel-body {
+      max-height: 318px;
+      overflow: scroll;
+      overflow-x: hidden;
+    }
+
+    .connection-alert {
+      width: 300px;
+      position: fixed;
+      bottom: 10px;
+      right: 30px;
+    }
+
+    .panel-heading > button {
+      margin-left: 10px;
+    }
+
+    .panel-title {
+      text-transform: initial !important;
+    }
+
+    .well h3 {
+      margin-top: 0;
+    }
+
+    #emitDataMenuButton {
+      margin-right: 0;
+    }
+  </style>
+  <meta property="og:image" content="https://amritb.github.io/socketio-client-tool/screenshot.png" />
+  <meta property="og:title" content="Socket.io Client Tool" />
+  <meta property="og:description" content="This tools helps you to test socket.io servers." />
+</head>
+
+<body>
+  <nav class="navbar navbar-default navbar-static-top">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">Socket.io Client Tool</a>
+      </div>
+      <p class="navbar-text ghbtns">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<iframe src="https://ghbtns.com/github-btn.html?user=amritb&repo=socketio-client-tool&type=star&count=true&size=small" frameborder="0" scrolling="0" width="170px" height="20px"></iframe></p>
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <form id="connect" class="navbar-form navbar-right" role="search">
+          <div class="form-group long-input">
+            <input id="socketUrl" type="text" class="form-control inline-right-margin" placeholder="Socket.io server URL" />
+          </div>
+          <div class="form-group short-input">
+            <input id="socketPath" type="text" class="form-control inline-right-margin" placeholder="Path (/socket.io)" />
+          </div>
+          <div class="form-group long-input">
+            <input id="socketOptions" type="text" class="form-control inline-right-margin" placeholder="Socket.io options json" />
+          </div>
+
+          <button type="submit" class="btn btn-success">Connect</button>
+        </form>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <ul class="nav nav-tabs" role="tablist">
+      <li role="presentation" class="active">
+        <a href="#listening" aria-controls="profile" role="tab" data-toggle="tab">Listening</a>
+      </li>
+      <li role="presentation">
+        <a href="#emiting" aria-controls="home" role="tab" data-toggle="tab">Emiting</a>
+      </li>
+      <li role="presentation">
+        <a href="#emitHistory" aria-controls="history" role="tab" data-toggle="tab">Emit History</a>
+      </li>
+      <li role="presentation">
+        <a href="#emitAckRes" aria-controls="ackRes" role="tab" data-toggle="tab">Emiting AckRes</a>
+      </li>
+    </ul>
+
+    <div class="tab-content">
+      <div class="row tab-pane" role="tabpanel" id="emiting">
+        <p>
+          <div class="col-sm-12">
+            <div id="emitPanel">
+              <form id="emitData">
+                <div class="form-group well">
+                  <div class="col-sm-5">
+                    <input type="text" class="form-control" id="event-name" placeholder="Event name">
+                  </div>
+                  <button id="submitEmit" type="submit" class="btn btn-success" disabled>Emit</button>
+                  <span class="label label-primary emitted-msg">Event emitted!</span>
+                  <span class="label label-danger emitted-failure-msg">Event failure</span>
+                </div>
+                <div class="form-group">
+                  <label class="radio-inline">
+                    <input id="emitAsPlaintext" type="radio" name="emitAs" value="plaintext" checked="checked" />
+                    Send data as plaintext
+                  </label>
+                  <label class="radio-inline">
+                    <input id="emitAsJSON" type="radio" name="emitAs" value="JSON" />
+                    Send data as JSON object
+                  </label>
+                </div>
+                <div class="form-group">
+                  <div id="plainTextData">
+                    <label for="data-text" class="control-label">Data: plaintext</label>
+                    <textarea class="form-control" id="data-text"></textarea>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div id="jsonData">
+                    <div>
+                      <label for="data-text" class="control-label">Data: JSON (key, value, type)</label>
+                    </div>
+                    <button id="addNewJsonField" type="button" class="btn btn-xs btn-warning">add new</button></br>
+                    <div class="form-inline">
+                      <div class="form-group">
+                        <input type="text" class="form-control key">
+                      </div>
+                      <div class="form-group">
+                        <input type="text" class="form-control value">
+                      </div>
+                      <div class="form-group">
+                        <select class="form-control type">
+                          <option value="string">String</option>
+                          <option value="number">Number</option>
+                          <option value="boolean">Boolean</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </p>
+      </div>
+
+      <div class="row tab-pane active" role="tabpanel" id="listening">
+        <p>
+
+          <div id="socketInfo" class="col-sm-12" style="display: none">
+            <div class="well">
+              <h3>Socket Details</h3>
+
+              <div class="details"></div>
+            </div>
+          </div>
+
+          <div class="col-sm-12">
+            <div class="well">
+              <form id="addListener">
+                <div class="col-sm-5">
+                  <input type="text" class="eventName form-control" id="exampleInputEmail3" placeholder="Event name">
+                </div>
+                <button type="submit" class="btn btn-success">Listen</button>
+                <button type="button" class="btn btn-warning pull-right" onclick="clearAllEvents()">Clear All Events</button>
+                <span class="label label-danger listen-failure-msg">Can't add duplicated or empty listener</span>
+                <span class="label label-primary listen-added-msg">Listener added</span>
+              </form>
+            </div>
+          </div>
+
+          <div class="col-sm-12">
+            <div id="eventPanels">
+              <div class="panel panel-primary" id="panel-connected">
+                <div class="panel-heading">
+                  <button type="button" class="btn btn-warning btn-xs pull-right" data-toggle="collapse" data-target="#connectionPanel" aria-expanded="false" aria-controls="connectionPanel">
+                    Toggle panel</button>
+                  <button type="button" class="btn btn-warning btn-xs pull-right" onclick="clearEvents('connectionPanel')">
+                    Clear Events</button>
+                  <h3 class="panel-title">On "connect / disconnect" Events</h3>
+                </div>
+                <div id="connectionPanel" class="panel-body">
+                </div>
+              </div>
+            </div>
+          </div>
+        </p>
+      </div>
+      <div class="row tab-pane" role="tabpanel" id="emitAckRes">
+        <p>
+          <div class="col-sm-12">
+            <div id="emitAckResPanels">
+              <!--wait emiting-->
+            </div>
+          </div>
+        </p>
+      </div>
+      <div class="row tab-pane" role="tabpanel" id="emitHistory">
+        <p>
+          <div class="col-sm-12">
+            <div id="emitHistoryPanels">
+              <!--wait emiting-->
+            </div>
+          </div>
+          <div class="col-sm-12">
+            <div class="well">
+              <form id="clearHistory">
+                <button type="submit" class="btn btn-success">Clear ALL History</button>
+              </form>
+            </div>
+          </div>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="alert alert-danger connection-alert disconnected-alert text-center">
+    <strong>Disconnected</strong>
+  </div>
+  <div class="alert alert-success connection-alert connected-alert text-center">
+    <strong>Connected!</strong>
+  </div>
+
+  <script type="text/html" id="historyContent">
+    <div class="row">
+      <form id="form[[id]]">
+        <div class="col-sm-2">
+          <span class="text-muted">[[time]]</span>
+        </div>
+        <div class="col-sm-6">
+          <input type="text" class="form-control" name="reqData" value='[[reqData]]' />
+        </div>
+        <div class="col-sm-4">
+          <button type="submit" class="btn btn-success">Emit</button>
+          <span class="label label-primary emitted-msg-[[id]]" style="display:none">Event emitted!</span>
+          <span class="label label-danger emitted-failure-msg-[[id]]" style="display:none">Event failure</span>
+          <input type="hidden" name="historyId" value="[[id]]">
+          <input type="hidden" name="event" value="[[event]]">
+        </div>
+      </form>
+    </div>
+  </script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.slim.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pouchdb/6.2.0/pouchdb.min.js"></script>
+  <script src="app.js"></script>
+</body>
+
+</html>

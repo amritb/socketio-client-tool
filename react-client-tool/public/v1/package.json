@@ -1,0 +1,21 @@
+{
+  "name": "socketio-client-tool",
+  "version": "1.0.0",
+  "description": "This tools helps you to test socket.io servers.",
+  "license": "MIT",
+  "scripts": {
+    "start": "http-server",
+    "dev": "nodemon -e js,html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/amritb/socketio-client-tool.git"
+  },
+  "devDependencies": {
+    "@types/jquery": "^3.5.5",
+    "@types/pouchdb": "^6.4.0",
+    "@types/socket.io-client": "^1.4.34",
+    "http-server": "^0.11.1",
+    "nodemon": "^2.0.6"
+  }
+}

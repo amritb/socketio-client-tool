@@ -1,0 +1,14 @@
+{
+  "name": "dummy-server",
+  "version": "1.0.0",
+  "description": "A simple socket.io server to test socketio-client-tool",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node index.js"
+  },
+  "author": "Amrit Bera",
+  "license": "MIT",
+  "dependencies": {
+    "socket.io": "^3"
+  }
+}
