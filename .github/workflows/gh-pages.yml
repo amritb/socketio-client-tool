@@ -15,3 +15,9 @@ jobs:
           cd react-client-tool
           npm install
           npm run build
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./react-client-tool/build
+          target_branch: temp-gh-pages
