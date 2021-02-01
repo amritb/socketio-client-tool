@@ -2,9 +2,9 @@
 
 Quickly test your socket.io backend apps
 
-<img src="https://amritb.github.io/socketio-client-tool/ss1.png" alt="Socket.io Client Tool"></img>
+<img src="https://raw.githubusercontent.com/amritb/socketio-client-tool/master/ss1.png" alt="Socket.io Client Tool"></img>
 
-<img src="https://amritb.github.io/socketio-client-tool/ss2.png" alt="Socket.io Client Tool"></img>
+<img src="https://raw.githubusercontent.com/amritb/socketio-client-tool/master/ss2.png" alt="Socket.io Client Tool"></img>
 
 ## Development Environment
 
