@@ -1,3 +1,11 @@
+![deploy-to-gh-pages](https://github.com/amritb/socketio-client-tool/workflows/deploy-to-gh-pages/badge.svg)
+
+Quickly test your socket.io backend apps
+
+<img src="https://amritb.github.io/socketio-client-tool/ss1.png" alt="Socket.io Client Tool"></img>
+
+<img src="https://amritb.github.io/socketio-client-tool/ss2.png" alt="Socket.io Client Tool"></img>
+
 ## Development Environment
 
 #### VS Code
