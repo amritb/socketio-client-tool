@@ -19,7 +19,7 @@ export default function Listen({ listeners, addListener, listenHistory, clearHis
 
   const onFormSubmit = (e) => {
     e.preventDefault();
-    addListener(channel);
+    addListener([channel]);
     setChannel('');
   }
 

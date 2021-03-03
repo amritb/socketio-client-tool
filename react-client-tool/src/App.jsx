@@ -3,7 +3,7 @@ import Connection from './components/connection.jsx';
 import Listen from './components/listen.jsx';
 import Emitter from './components/emitter.jsx';
 import Ack from './components/ack.jsx';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { io } from 'socket.io-client';
 import { Container, Row, Col, Modal, Tabs, Tab } from 'react-bootstrap';
 import { MdCloudDone, MdCloudOff } from 'react-icons/md';
@@ -11,6 +11,12 @@ import { MdCloudDone, MdCloudOff } from 'react-icons/md';
 
 
 function App() {
+
+  const [socket, setSocket] = useState(null);
+  const [isReady, setIsReady] = useState(false);
+
+  const isReadyRef = useRef();
+  isReadyRef.current = isReady;
 
   const [connData, setConnData] = useState({
     connected: false,
@@ -42,59 +48,60 @@ function App() {
         errors: []
       }
     });
+    setSocket(() => io(url, JSON.parse(config)));
+  }
 
-    window.iosocket = io(url, JSON.parse(config));
+  useEffect(() => {
+    if (socket === null) {
+      return;
+    }
+    socket.on("connect", () => {
+      if (isReadyRef.current === true) {
+        return;
+      }
 
-    window.iosocket.on("connect", () => {
       setConnData(() => {
         return {
           connected: true,
           loading: false,
-          server: url,
-          socketId: window.iosocket.id,
-          config: config,
+          server: connData.url,
+          socketId: socket.id,
+          config: connData.config,
           errors: []
         }
       });
-      eventsToListenFor.map(item => addListener(item));
+      addListener(eventsToListenFor);
+      setIsReady(() => true);
     });
 
-    window.iosocket.on('disconnect', (reason) => {
+    socket.on('disconnect', (reason) => {
       console.log("on disconnect", reason);
     });
+  }, [socket]);
 
+  useEffect(() => {
 
-    // window.iosocket.on("connect_error", (error) => {
-    //   console.log('connect_error', error);
-    //   setConnData(() => {
-    //     return {
-    //       connected: false,
-    //       loading: false,
-    //       server: url,
-    //       config: config,
-    //       errors: [error]
-    //     }
-    //   });
-    // });
+  }, [listenTo]);
 
-  }
-
-  function addListener(channel) {
-    if (listenTo.includes(channel)) {
-      return;
-    }
-    setListenTo(items => [channel, ...items]);
-    window.iosocket.on(channel, (response) => {
-      console.log("data received", channel, response);
-      const d = new Date();
-      const data = {
-        key: d.toLocaleString(),
-        date: d,
-        channel: channel,
-        data: typeof response === 'string' ? response : JSON.stringify(response, null, 2),
-        dataType: typeof response === 'string' ? 'string' : 'json'
-      };
-      setListenHistory(i => [data, ...i]);
+  function addListener(channels) {
+    channels.forEach(channel => {
+      const channelsToAdd = [];
+      if (!listenTo.includes(channel)) {
+        channelsToAdd.push(channel);
+        socket.on(channel, (response) => {
+          console.log("data received", channel, response);
+          const d = new Date();
+          const data = {
+            key: d.toLocaleString(),
+            date: d,
+            channel: channel,
+            data: typeof response === 'string' ? response : JSON.stringify(response, null, 2),
+            dataType: typeof response === 'string' ? 'string' : 'json'
+          };
+          setListenHistory(i => [data, ...i]);
+        });
+      }
+      setListenTo(items => [...channelsToAdd, ...items]);
     });
   }
 
@@ -103,7 +110,7 @@ function App() {
   }
 
   const emitData = (emitChannel, dataToEmit) => {
-    window.iosocket.emit(emitChannel, dataToEmit, (ack) => {
+    socket.emit(emitChannel, dataToEmit, (ack) => {
       const date = new Date();
       const store = {
         key: date.toUTCString(),
