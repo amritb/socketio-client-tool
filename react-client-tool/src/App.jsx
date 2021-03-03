@@ -74,10 +74,7 @@ function App() {
       setIsReady(() => true);
     });
 
-    socket.on('disconnect', (reason) => {
-      console.log("on disconnect", reason);
-    });
-  }, [socket]);
+  });
 
   useEffect(() => {
 
