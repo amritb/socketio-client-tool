@@ -30,7 +30,7 @@ function App() {
   const [eventsToListenFor, setEventsToListenFor] = useState(['socketio-client', 'message']);
 
   const [listenTo, setListenTo] = useState([]);
-  const [emitTo, setEmitTo] = useState(['socketio-client', 'socketio-client-ack']);
+  const [emitTo, setEmitTo] = useState(['socketio-client', 'socketio-client-ack', 'join', 'leave']);
 
   // Storage
   const [emitHistory, setEmitHistory] = useState([]);
