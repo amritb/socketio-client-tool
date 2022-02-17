@@ -16,3 +16,7 @@ Use `Remote Containers: Reopen in Container`. This should use `.devcontainer/dev
 Start a local socket.io server on 8080 with `cd dummy-server && npm install`, then `npm run dev`.
 
 You can start the client app locally with `cd react-client-tool && npm install`, then `yarn start`.
+
+## Sponsors
+
+- [Poridorshok | Bengali News](https://poridorshok.com)
