@@ -64,7 +64,7 @@ function App() {
         return {
           connected: true,
           loading: false,
-          server: connData.url,
+          server: connData.server,
           socketId: socket.id,
           config: connData.config,
           errors: []
