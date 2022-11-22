@@ -9,6 +9,6 @@
   "author": "Amrit Bera",
   "license": "MIT",
   "dependencies": {
-    "socket.io": "^3"
+    "socket.io": "^4"
   }
 }
